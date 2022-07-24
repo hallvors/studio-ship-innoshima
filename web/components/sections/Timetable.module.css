@@ -1,0 +1,9 @@
+.datecell {
+    min-height: 100px;
+}
+
+.date {
+    width: 100%;
+    font-weight: bold;
+	box-shadow: 0px 5px 7px -2px #D68031;
+}
