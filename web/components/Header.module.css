@@ -3,7 +3,8 @@
 }
 
 .logo {
-
+    float: left;
+    padding-right: 3em;
 }
 
 .top-banner {

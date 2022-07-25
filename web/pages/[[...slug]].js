@@ -30,7 +30,6 @@ export const getServerSideProps = async ({params}) => {
     }`
   );
   // site has title, description, footer, header, homepage (ref), keywords
-  console.log(JSON.stringify(site, null, 2))
 
   const contentProjection = groq`"content": content[]{
     ...,
@@ -44,11 +43,18 @@ export const getServerSideProps = async ({params}) => {
       *[_type == 'event' && defined(start) && start < now()] |
       order(start desc) [0] {_id, title, start}
     `),
-    client.fetch(groq`*[_id == 'global-schedule']`),
+    client.fetch(groq`*[_id == 'global-schedule'][0] {
+      _type,
+      exceptions,
+      "lessons": lessons[] {
+        weekday, time,
+        "activity": activity->{...},
+        "teacher": teacher->{...}
+      }
+    }`),
   ]
 
   if (slug === '/') {
-    console.log('fetch home page')
     promises.push(client.fetch(groq`*[_type == "page" && _id == $id][0]{..., ${contentProjection}}`, {id: site.homepage._ref}));
   } else {
     promises.push(client
@@ -75,8 +81,6 @@ export const getServerSideProps = async ({params}) => {
 const builder = imageUrlBuilder(client)
 
 const LandingPage = ({page, site, nextEvent, schedule}) => {
-
-  console.log('made it to handler', {page, site, schedule})
 
   if(!page) {
     return null
@@ -146,7 +150,7 @@ LandingPage.propTypes = {
   page: PropTypes.shape({
     title: PropTypes.string,
     description: PropTypes.string,
-    slug: PropTypes.string,
+    slug: PropTypes.shape({current: PropTypes.string }),
     content: PropTypes.any,
 
   }),

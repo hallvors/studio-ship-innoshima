@@ -1,9 +1,30 @@
 .datecell {
-    min-height: 100px;
+    min-height: 120px;
 }
 
 .date {
     width: 100%;
     font-weight: bold;
 	box-shadow: 0px 5px 7px -2px #D68031;
+}
+
+.past {
+    color: #ccc;
+}
+
+.dateDetails {
+
+}
+
+.lesson {
+    margin-top: 1em;
+
+}
+
+.exception {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 95px;
 }

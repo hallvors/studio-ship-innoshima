@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import * as SectionComponents from './sections'
-import Figure from './figure'
+import Figure from './Figure'
 import SimpleBlockContent from './SimpleBlockContent'
+import styles from './RenderSections.module.css'
 
 function resolveSections(section) {
     switch (section._type) {
@@ -38,8 +39,7 @@ function RenderSections(props) {
                 if (!SectionComponent) {
                     return <div>Missing section {section._type}</div>
                 }
-                console.log(section)
-                return <section key={section._key} className={`section-${idx}`}>
+                return <section key={section._key} className={`section-${idx} ${styles[`section-${section._type}`]}`}>
                     <SectionComponent {...section} />
                 </section>
             })}

@@ -4,7 +4,7 @@ export default {
   icon: MdSettings,
   name: 'siteSettings',
   type: 'document',
-  title: 'Site Settings',
+  title: 'サイトの設定',
   __experimental_actions: [
     // 'create',
     'update',

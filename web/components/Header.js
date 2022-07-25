@@ -10,7 +10,7 @@ const builder = imageUrlBuilder(client)
 
 function Header(props) {
     const { content, nextEvent, logo } = props
-
+console.log(nextEvent)
     return (
         <>
             <div className={styles["header"]}>

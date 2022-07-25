@@ -6,14 +6,14 @@ import client from '../client'
 
 const builder = imageUrlBuilder(client)
 
-function Figure({image}) {
+function Figure(image) {
   if (!(image && image.asset)) {
     return null
   }
   return (
     <figure className={styles.content}>
       <img
-        src={builder.image(image.asset).auto('format').width(2000).url()}
+        src={builder.image(image.asset).auto('format').width(800).url()}
         className={styles.image}
         alt={image.alt}
       />

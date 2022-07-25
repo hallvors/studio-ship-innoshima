@@ -1,0 +1,5 @@
+.maingrid {
+    /* header, content, footer grid */
+    display: grid;
+    grid-template-rows: 1fr 90% 1fr;
+}

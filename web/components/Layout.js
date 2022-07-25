@@ -5,6 +5,7 @@ import Head from 'next/head'
 import {LogoJsonLd} from 'next-seo'
 import Header from './Header'
 import Footer from './Footer'
+import styles from './Layout.module.css'
 
 function Layout(props) {
   const {site, nextEvent, children} = props
@@ -22,7 +23,7 @@ function Layout(props) {
         <meta name="viewport" content="initial-scale=1.0, width=device-width, viewport-fit=cover" />
         <meta name="keywords" content={keywords.join(', ')} />
       </Head>
-      <div className="container">
+      <div className={styles.maingrid}>
         <Header content={header} nextEvent={nextEvent} logo={logo} />
         <div className="content">{children}</div>
         <Footer navItems={footerNavItems} text={footer} />

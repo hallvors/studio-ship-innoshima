@@ -8,7 +8,7 @@ export default () =>
   S.list()
     .title('Studio SHIP')
     .items([
-      S.documentListItem().id('global-config').schemaType('siteSettings').title('サイト'),
+      S.documentListItem().id('global-config').schemaType('siteSettings').title('サイトの設定'),
       S.documentTypeListItem('person').title('先生'),
       S.documentTypeListItem('activity').title('活動'),
       S.documentTypeListItem('event').title('イベント'),

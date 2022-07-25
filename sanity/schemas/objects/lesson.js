@@ -60,7 +60,7 @@ export default {
     },
     {
         name: 'activity',
-        title: '',
+        title: '活動',
         type: 'reference',
         to: [
             {type: 'activity'}

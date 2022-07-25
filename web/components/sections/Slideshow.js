@@ -2,6 +2,7 @@ import React from 'react';
 import { Zoom } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 import Figure from '../Figure';
+import styles from './Slideshow.module.css';
 const buttonStyle = {
     width: "30px",
     background: 'none',
@@ -18,11 +19,11 @@ const Slideshow = (props) => {
         return null
     }
     return (
-        <div>
+        <div className="slide-container">
             <Zoom {...properties}>
                 {
                     props.images.map((image) => {
-                        <Figure image={image} key={image.asset._ref} />
+                        return <Figure {...image} key={image.asset._ref} />
                     })
                 }
             </Zoom>

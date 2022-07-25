@@ -4,12 +4,13 @@ import styles from './Links.module.css';
 import Link from 'next/link'
 import { getPathFromSlug } from '../../utils/urls';
 
-export default function Links({contents}) {
+export default function Links(props) {
+  const {contents} = props;
     if (!(contents && contents.length)) {
         return null;
     }
     return <ul className={styles['linklist']}>{contents.map(link => {
-        <li key={link.slug.current} className={styles.item}>
+        return <li key={link.slug.current} className={styles.item}>
         <Link href={getPathFromSlug(link.slug.current)}>
           <a>
             {link.title}
