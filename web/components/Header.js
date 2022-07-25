@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
+import Image from 'next/image'
 import SimpleBlockContent from './SimpleBlockContent'
 import imageUrlBuilder from '@sanity/image-url'
 import client from '../client'
@@ -10,12 +11,11 @@ const builder = imageUrlBuilder(client)
 
 function Header(props) {
     const { content, nextEvent, logo } = props
-console.log(nextEvent)
     return (
         <>
             <div className={styles["header"]}>
                 {logo && <div className={styles['logo']}>
-                    <Link href="/"><a><img
+                    <Link href="/"><a><Image
                         src={builder.image(logo.asset).auto('format').width(200).url()}
                         alt="Studio SHIP logo"
                     /></a></Link>

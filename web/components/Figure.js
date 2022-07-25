@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Image from 'next/image'
 import imageUrlBuilder from '@sanity/image-url'
 import styles from './Figure.module.css'
 import client from '../client'
@@ -12,7 +13,7 @@ function Figure(image) {
   }
   return (
     <figure className={styles.content}>
-      <img
+      <Image
         src={builder.image(image.asset).auto('format').width(800).url()}
         className={styles.image}
         alt={image.alt}

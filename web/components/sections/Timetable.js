@@ -4,7 +4,7 @@ import styles from './Timetable.module.css';
 import Link from 'next/link'
 import Calendar from 'react-calendar'
 import { parseISO, format, isPast, isAfter, isBefore } from "date-fns";
-import { en, ja } from 'date-fns/locale'
+import { enGB, ja } from 'date-fns/locale'
 
 export default function Timetable(props) {
     const { lessons, exceptions } = props;
@@ -34,9 +34,9 @@ export default function Timetable(props) {
         }
 
         if (!cellContents) {
-            const weekday = format(date, 'cccc', { locale: en }).toLowerCase();
+            const weekday = format(date, 'cccc', { locale: enGB }).toLowerCase();
             if (lessonsByDay[weekday]) {
-                cellContents = lessonsByDay[weekday].map(lesson => <div className={styles['lesson']}><b>{lesson.activity.name}</b> - {lesson.time}<br />{lesson.teacher.name}</div>)
+                cellContents = lessonsByDay[weekday].map(lesson => <div className={styles['lesson']} key={lesson._key}><b>{lesson.activity.name}</b> - {lesson.time}<br />{lesson.teacher.name}</div>)
             }
         }
 

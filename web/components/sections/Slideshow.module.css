@@ -1,0 +1,9 @@
+.slide {
+    max-width: 800px;
+  }
+
+  .button {
+    width: "30px";
+    background: 'none';
+    border: '0px';
+  }
