@@ -15,7 +15,7 @@ function Layout(props) {
     return <div>Missing config</div>;
   }
 
-  const { keywords, header, footerNavItems, footer, logo } = site;
+  const { keywords, header, footer, logo } = site;
 
   return (
     <>
@@ -29,7 +29,7 @@ function Layout(props) {
       <div className={styles.maingrid}>
         <Header content={header} nextEvent={nextEvent} logo={logo} />
         <div className="content">{children}</div>
-        <Footer navItems={footerNavItems} text={footer} />
+        <Footer text={footer} />
       </div>
     </>
   );

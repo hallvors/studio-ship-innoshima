@@ -133,6 +133,9 @@ const LandingPage = ({ page, site, nextEvent, schedule, teachers, activities }) 
       }
     }
   }
+
+  content.unshift(site.globalNavItems);
+
   const openGraphImages = site.openGraphImage
     ? [
         {

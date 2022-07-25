@@ -45,6 +45,11 @@ export default {
       title: 'Site header'
     },
     {
+      name: 'globalNavItems',
+      type: 'links',
+      title: 'Site navigation links',
+    },
+    {
       name: 'logo',
       type: 'image',
       title: 'Site logo image',
@@ -54,11 +59,6 @@ export default {
       name: 'footer',
       type: 'complexPortableText',
       title: 'Site footer text'
-    },
-    {
-      name: 'footerNavItems',
-      type: 'links',
-      title: 'Site footer links',
     },
     {
       name: 'openGraphImage',
