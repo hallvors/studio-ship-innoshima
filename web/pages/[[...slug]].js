@@ -121,7 +121,7 @@ const LandingPage = ({ page, site, nextEvent, schedule, teachers, activities }) 
     return null;
   }
 
-  const { title = "Missing title", description, content = [], slug } = page;
+  const { title = "Missing title", content = [], slug } = page;
 
   // a bit of a hack here, sorry about this
   if (content) {
@@ -163,7 +163,7 @@ const LandingPage = ({ page, site, nextEvent, schedule, teachers, activities }) 
       <NextSeo
         title={title}
         titleTemplate={`%s - ${site.title}`}
-        description={`${site.description} ${description}`}
+        description={`${site.description}`}
         canonical={site.url && `${site.url}/${slug}`}
         openGraph={{
           images: openGraphImages,
