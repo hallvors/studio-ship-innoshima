@@ -14,12 +14,16 @@ function Figure(image) {
   if (!(image && image.asset)) {
     return null;
   }
-  console.log(image)
+  console.log(image);
 
   return (
     <figure className={styles.content}>
       <Image
-        src={builder.image(Object.assign({}, image)).width(DEFAULT_WIDTH).height(DEFAULT_HEIGHT).url()}
+        src={builder
+          .image(Object.assign({}, image))
+          .width(DEFAULT_WIDTH)
+          .height(DEFAULT_HEIGHT)
+          .url()}
         className={styles.image}
         alt={image.alt}
         width={DEFAULT_WIDTH}

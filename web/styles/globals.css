@@ -4,7 +4,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  background-color: #eee;
+  background-color:azure;
 }
 
 * {
@@ -25,4 +25,31 @@ body {
   .two-column-page section.section-0 {
     grid-column-start: 1;
   }
+
+  html {
+    background-color: rgb(255, 251, 237);
+  }
+
+  body {
+    margin: 2vh 5vw;
+    padding: 0;
+    border-left: 1px solid #D68031;
+    border-right: 1px solid #D68031;
+    border-bottom: 1px solid #D68031;
+  }
+}
+
+h1, h2, h3 {
+  text-align: center;
+  margin-top: 0.3em;
+}
+
+h1 {
+  font-weight: lighter;
+}
+
+.react-calendar__tile {
+  padding-left: 0;
+  padding-right: 0;
+  background-color: azure;
 }

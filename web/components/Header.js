@@ -27,12 +27,21 @@ function Header(props) {
                     .url()}
                   alt="Studio SHIP logo"
                   width={150}
-                  height={logo.dimensions ? relativeHeight(logo.dimensions.width, 150, logo.dimensions.height) : null}
+                  height={
+                    logo.dimensions
+                      ? relativeHeight(
+                          logo.dimensions.width,
+                          150,
+                          logo.dimensions.height
+                        )
+                      : null
+                  }
                 />
               </a>
             </Link>
           </div>
         )}
+
         <SimpleBlockContent content={content} />
 
         {nextEvent && (

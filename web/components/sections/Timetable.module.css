@@ -1,11 +1,15 @@
+.timetable {
+    margin-right: 1em;
+}
+
 .datecell {
-    min-height: 120px;
+    min-height: 160px;
 }
 
 .date {
     width: 100%;
     font-weight: bold;
-	box-shadow: 0px 5px 7px -2px #D68031;
+	box-shadow: 0px 1px 5px -3px #d68031;
 }
 
 .past {
@@ -27,21 +31,4 @@
     align-items: center;
     justify-content: center;
     min-height: 95px;
-}
-
-.contentgrid {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: space-evenly;
-	align-items: stretch;
-	align-content: stretch;
-    background-color: #D68031;
-    grid-gap: 1px;
-}
-
-.contentgrid>div {
-    flex: 1 1 0px;
-    background-color: #eee;
-    padding: 1em;
 }

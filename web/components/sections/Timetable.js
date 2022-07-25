@@ -5,11 +5,12 @@ import Link from "next/link";
 import Calendar from "react-calendar";
 import { parseISO, format, isPast, isAfter, isBefore } from "date-fns";
 import { enGB, ja } from "date-fns/locale";
-import RichTextWithOptionalPhoto from "../RichTextWithOptionalPhoto";
 
 export default function Timetable(props) {
   const { lessons, exceptions, teachers, activities } = props;
-  console.log(JSON.stringify({ lessons, exceptions, teachers, activities }, null, 2));
+  console.log(
+    JSON.stringify({ lessons, exceptions, teachers, activities }, null, 2)
+  );
   const now = new Date();
   now.setDate(15); // mid-month avoids TZ-related off-by-one errors
   const isoMonth = now.toISOString().split(/-/g).slice(0, 2).join("-");
@@ -46,9 +47,22 @@ export default function Timetable(props) {
       if (lessonsByDay[weekday]) {
         cellContents = lessonsByDay[weekday].map((lesson) => (
           <div className={styles["lesson"]} key={lesson._key}>
-            {lesson.activity && <b>{activities[lesson.activity._ref].name}</b>} - {lesson.time}
+            {lesson.activity && (
+              <Link href={`/レッスン/${activities[lesson.activity._ref].name}`}>
+                <a>
+                  <b>{activities[lesson.activity._ref].name}</b>
+                </a>
+              </Link>
+            )}{" "}
+            - {lesson.time}
             <br />
-            {lesson.teacher && <span>{teachers[lesson.teacher._ref].name}</span>}
+            {lesson.teacher && (
+              <span>
+                <Link href={`/先生/${teachers[lesson.teacher._ref].name}`}>
+                  <a>{teachers[lesson.teacher._ref].name}</a>
+                </Link>
+              </span>
+            )}
           </div>
         ));
       }
@@ -68,36 +82,12 @@ export default function Timetable(props) {
   }
 
   return (
-    <div>
-    <h2>タイムテーブル</h2>
-    <Calendar
-      defaultActiveStartDate={new Date(`${isoMonth}-15`)}
-      formatDay={formatDay}
-    />
-    <h2>レッスンの種類</h2>
-    <div className={styles["contentgrid"]}>
-        {
-            Object.keys(activities).map(id => <div key={id}>
-                <RichTextWithOptionalPhoto
-                    title={activities[id].name}
-                    image={activities[id].image}
-                    description={activities[id].description}
-                />
-            </div>)
-        }
-    </div>
-    <h2>先生</h2>
-    <div className={styles["contentgrid"]}>
-        {
-            Object.keys(teachers).map(id => <div key={id}>
-                <RichTextWithOptionalPhoto
-                    title={teachers[id].name}
-                    image={teachers[id].image}
-                    description={teachers[id].bio}
-                />
-            </div>)
-        }
-    </div>
+    <div className={styles["timetable"]}>
+      <h2>タイムテーブル</h2>
+      <Calendar
+        defaultActiveStartDate={new Date(`${isoMonth}-15`)}
+        formatDay={formatDay}
+      />
     </div>
   );
 }

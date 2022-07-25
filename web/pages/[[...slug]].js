@@ -7,6 +7,7 @@ import React from "react";
 import client from "../client";
 import Layout from "../components/Layout";
 import RenderSections from "../components/RenderSections";
+import RichTextWithOptionalPhoto from "../components/RichTextWithOptionalPhoto";
 
 import { getSlugVariations, slugParamToPath } from "../utils/urls";
 
@@ -18,13 +19,13 @@ import { getSlugVariations, slugParamToPath } from "../utils/urls";
  * From the received params.slug, we're able to query Sanity for the route coresponding to the currently requested path.
  */
 export const getServerSideProps = async ({ params }) => {
-  console.log(params);
   const slug = slugParamToPath(params?.slug);
-  console.log({ slug });
+  const slugParts = slug.split(/\//g);
   // TODO: support a type/ID mode for teacher, event, activity?
   let site = await client.fetch(
     groq`*[_id == "global-config"][0]{
       ...,
+      "homepage": homepage->{_id, title, slug},
       "globalNavItems": globalNavItems{_type, "contents":contents[]->{title, slug, _key}},
       "logo": logo{..., "dimensions":asset->metadata.dimensions}
     }`
@@ -69,10 +70,10 @@ export const getServerSideProps = async ({ params }) => {
     promises.push(
       client.fetch(
         groq`*[_type == "page" && _id == $id][0]{..., ${contentProjection}}`,
-        { id: site.homepage._ref }
+        { id: site.homepage._id }
       )
     );
-  } else {
+  } else if (slugParts.length === 1) {
     promises.push(
       client.fetch(
         // Get the route document with one of the possible slugs for the given requested path
@@ -80,26 +81,44 @@ export const getServerSideProps = async ({ params }) => {
         { possibleSlugs: getSlugVariations(slug) }
       )
     );
+  } else {
+    // if we have a multi-level slug, say
+    // [ 'レッスン', 'バレエー' ]
+    // ..we get the data here already
+    promises.push(null);
   }
 
   const [nextEvent, schedule, teachers, activities, page] = await Promise.all(
     promises
   );
+  let nonPageContent = null;
 
-  if (!page?._type === "page") {
+  if (!page && slugParts.length === 2) {
+    switch (slugParts[0]) {
+      case "レッスン":
+        nonPageContent = activities.find(
+          (activity) => activity.name === slugParts[1]
+        );
+        break;
+      case "先生":
+        nonPageContent = teachers.find(
+          (teacher) => teacher.name === slugParts[1]
+        );
+        break;
+    }
+  }
+
+  if (!page?._type === "page" && !nonPageContent) {
     return {
       notFound: true,
     };
   }
 
   function indexBy(ar, prop) {
-    return ar.reduce(
-      (accumulated, current) => {
-        accumulated[current[prop]] = current;
-        return accumulated;
-      },
-      {}
-    );
+    return ar.reduce((accumulated, current) => {
+      accumulated[current[prop]] = current;
+      return accumulated;
+    }, {});
   }
 
   return {
@@ -107,6 +126,7 @@ export const getServerSideProps = async ({ params }) => {
       {
         site,
         page,
+        nonPageContent,
         nextEvent,
         schedule,
         teachers: indexBy(teachers, "_id"),
@@ -117,12 +137,29 @@ export const getServerSideProps = async ({ params }) => {
 
 const builder = imageUrlBuilder(client);
 
-const LandingPage = ({ page, site, nextEvent, schedule, teachers, activities }) => {
-  if (!page) {
+const LandingPage = ({
+  page,
+  nonPageContent,
+  site,
+  nextEvent,
+  schedule,
+  teachers,
+  activities,
+}) => {
+  if (!(page || nonPageContent)) {
     return null;
   }
 
-  const { title = "Missing title", content = [], slug } = page;
+  let title, content, slug;
+  if (page) {
+    title = page.title;
+    content = page.content;
+    slug = page.slug;
+  } else {
+    title = null;
+    content = null;
+    slug = null;
+  }
 
   // a bit of a hack here, sorry about this
   if (content) {
@@ -159,7 +196,6 @@ const LandingPage = ({ page, site, nextEvent, schedule, teachers, activities }) 
         },
       ]
     : [];
-
   return (
     <Layout site={site} nextEvent={nextEvent}>
       <NextSeo
@@ -172,10 +208,23 @@ const LandingPage = ({ page, site, nextEvent, schedule, teachers, activities }) 
         }}
         noindex={false}
       />
-      <div
-        className={"two-column-page"}
-      >
-        {content && <RenderSections sections={ [site.globalNavItems].concat(content)} />}
+      <div className={"two-column-page"}>
+        {content && (
+          <RenderSections
+            sections={[site.globalNavItems].concat(content)}
+            site={site}
+          />
+        )}
+        {nonPageContent && (
+          <>
+            <RenderSections sections={[site.globalNavItems]} site={site} />
+            <RichTextWithOptionalPhoto
+              title={nonPageContent.name}
+              image={nonPageContent.image}
+              description={nonPageContent.bio || nonPageContent.description}
+            />
+          </>
+        )}
       </div>
     </Layout>
   );

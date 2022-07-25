@@ -25,7 +25,7 @@ function resolveSections(section) {
 }
 
 function RenderSections(props) {
-  const { sections } = props;
+  const { sections, site } = props;
 
   if (!sections) {
     console.error("Missing section");
@@ -44,7 +44,7 @@ function RenderSections(props) {
             key={section._key || idx}
             className={`section-${idx} ${styles[`section-${section._type}`]}`}
           >
-            <SectionComponent {...section} />
+            <SectionComponent {...section} site={site} />
           </section>
         );
       })}

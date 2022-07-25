@@ -2,19 +2,30 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./Links.module.css";
 import Link from "next/link";
-import { getPathFromSlug } from "../../utils/urls";
+import { withRouter } from "next/router";
+import { getPathFromSlug, slugParamToPath } from "../../utils/urls";
 
-export default function Links(props) {
-  const { contents } = props;
+function Links(props) {
+  const { contents, router, site } = props;
   if (!(contents && contents.length)) {
     return null;
   }
+  console.log(site.homepage);
   return (
     <ul className={styles["linklist"]}>
       {contents.map((link) => {
+        const isActive =
+          slugParamToPath(router.query.slug) === link.slug.current;
+        const isHome = link.slug.current === site.homepage.slug.current;
+        if (isActive && isHome) {
+          return null;
+        }
         return (
-          <li key={link.slug.current} className={styles.item}>
-            <Link href={getPathFromSlug(link.slug.current)}>
+          <li
+            key={link.slug.current}
+            className={[styles.item, isActive ? styles.active : ""].join(" ")}
+          >
+            <Link href={isHome ? "/" : getPathFromSlug(link.slug.current)}>
               <a>{link.title}</a>
             </Link>
           </li>
@@ -33,4 +44,13 @@ Links.propTypes = {
       title: PropTypes.string.isRequired,
     })
   ),
+  site: PropTypes.object,
+  router: PropTypes.shape({
+    pathname: PropTypes.string,
+    query: PropTypes.shape({
+      slug: PropTypes.string,
+    }),
+  }),
 };
+
+export default withRouter(Links);
