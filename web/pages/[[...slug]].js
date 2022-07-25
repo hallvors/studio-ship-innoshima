@@ -25,7 +25,7 @@ export const getServerSideProps = async ({ params }) => {
   let site = await client.fetch(
     groq`*[_id == "global-config"][0]{
       ...,
-      "footerNavItems": footerNavItems[]->{title, slug},
+      "globalNavItems": globalNavItems{_type, "contents":contents[]->{title, slug, _key}},
       "logo": logo{..., "dimensions":asset->metadata.dimensions}
     }`
   );
@@ -34,7 +34,8 @@ export const getServerSideProps = async ({ params }) => {
   const contentProjection = groq`"content": content[]{
     ...,
       _type == 'links' => {
-      "contents": contents[]->{title, slug}
+        ...,
+      "contents": contents[]->{title, slug, _key}
     },
     _type == 'figure' => {
       ..., "dimensions":asset->metadata.dimensions
@@ -133,8 +134,9 @@ const LandingPage = ({ page, site, nextEvent, schedule, teachers, activities }) 
       }
     }
   }
-
-  content.unshift(site.globalNavItems);
+  if (site.globalNavItems) {
+    content.unshift(site.globalNavItems);
+  }
 
   const openGraphImages = site.openGraphImage
     ? [
