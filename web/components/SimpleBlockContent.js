@@ -1,14 +1,14 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import {PortableText} from '@portabletext/react'
-import Figure from './Figure'
+import React from "react";
+import PropTypes from "prop-types";
+import { PortableText } from "@portabletext/react";
+import Figure from "./Figure";
 
 function SimpleBlockContent(props) {
-  const {content} = props
+  const { content } = props;
 
   if (!content) {
-    console.error('Missing text to render', props)
-    return null
+    console.error("Missing text to render", props);
+    return null;
   }
 
   return (
@@ -20,11 +20,11 @@ function SimpleBlockContent(props) {
         },
       }}
     />
-  )
+  );
 }
 
 SimpleBlockContent.propTypes = {
   content: PropTypes.arrayOf(PropTypes.object),
-}
+};
 
-export default SimpleBlockContent
+export default SimpleBlockContent;

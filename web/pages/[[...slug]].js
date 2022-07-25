@@ -1,14 +1,14 @@
-import imageUrlBuilder from '@sanity/image-url'
-import groq from 'groq'
-import {NextSeo} from 'next-seo'
-import PropTypes from 'prop-types'
-import React from 'react'
+import imageUrlBuilder from "@sanity/image-url";
+import groq from "groq";
+import { NextSeo } from "next-seo";
+import PropTypes from "prop-types";
+import React from "react";
 
-import client from '../client'
-import Layout from '../components/Layout'
-import RenderSections from '../components/RenderSections'
+import client from "../client";
+import Layout from "../components/Layout";
+import RenderSections from "../components/RenderSections";
 
-import {getSlugVariations, slugParamToPath} from '../utils/urls'
+import { getSlugVariations, slugParamToPath } from "../utils/urls";
 
 /**
  * Fetches data for our pages.
@@ -17,16 +17,16 @@ import {getSlugVariations, slugParamToPath} from '../utils/urls'
  * for every page requested - /, /about, /contact, etc..
  * From the received params.slug, we're able to query Sanity for the route coresponding to the currently requested path.
  */
-export const getServerSideProps = async ({params}) => {
-  console.log(params)
-  const slug = slugParamToPath(params?.slug)
-  console.log({slug})
+export const getServerSideProps = async ({ params }) => {
+  console.log(params);
+  const slug = slugParamToPath(params?.slug);
+  console.log({ slug });
   // TODO: support a type/ID mode for teacher, event, activity?
-  let site = await client
-  .fetch(
+  let site = await client.fetch(
     groq`*[_id == "global-config"][0]{
       ...,
-      "footerNavItems": footerNavItems[]->{title, slug}
+      "footerNavItems": footerNavItems[]->{title, slug},
+      "logo": logo{..., "dimensions":asset->metadata.dimensions}
     }`
   );
   // site has title, description, footer, header, homepage (ref), keywords
@@ -36,7 +36,17 @@ export const getServerSideProps = async ({params}) => {
       _type == 'links' => {
       "contents": contents[]->{title, slug}
     },
+    _type == 'figure' => {
+      ..., "dimensions":asset->metadata.dimensions
+    },
+    _type == 'slideshow' => {
+      ..., "images": images[]{..., "dimensions":asset->metadata.dimensions}
+    }
    }`;
+
+  const imageProjection = groq`{
+    ..., "image": image{..., "dimensions":asset->metadata.dimensions}
+  }`;
 
   const promises = [
     client.fetch(groq`
@@ -47,57 +57,79 @@ export const getServerSideProps = async ({params}) => {
       _type,
       exceptions,
       "lessons": lessons[] {
-        weekday, time,
-        "activity": activity->{...},
-        "teacher": teacher->{...}
+        weekday, time, activity, teacher
       }
     }`),
-  ]
+    client.fetch(groq`*[_type == 'person']${imageProjection}`),
+    client.fetch(groq`*[_type == 'activity']${imageProjection}`),
+  ];
 
-  if (slug === '/') {
-    promises.push(client.fetch(groq`*[_type == "page" && _id == $id][0]{..., ${contentProjection}}`, {id: site.homepage._ref}));
+  if (slug === "/") {
+    promises.push(
+      client.fetch(
+        groq`*[_type == "page" && _id == $id][0]{..., ${contentProjection}}`,
+        { id: site.homepage._ref }
+      )
+    );
   } else {
-    promises.push(client
-      .fetch(
+    promises.push(
+      client.fetch(
         // Get the route document with one of the possible slugs for the given requested path
         groq`*[_type == "page" && slug.current in $possibleSlugs][0]{..., ${contentProjection}}`,
-        {possibleSlugs: getSlugVariations(slug)}
-      ));
+        { possibleSlugs: getSlugVariations(slug) }
+      )
+    );
   }
 
-  const [nextEvent, schedule, page] = await Promise.all(promises);
+  const [nextEvent, schedule, teachers, activities, page] = await Promise.all(
+    promises
+  );
 
-  if (!page?._type === 'page') {
+  if (!page?._type === "page") {
     return {
       notFound: true,
-    }
+    };
+  }
+
+  function indexBy(ar, prop) {
+    return ar.reduce(
+      (accumulated, current) => {
+        accumulated[current[prop]] = current;
+        return accumulated;
+      },
+      {}
+    );
   }
 
   return {
-    props: {site, page, nextEvent, schedule} || {},
+    props:
+      {
+        site,
+        page,
+        nextEvent,
+        schedule,
+        teachers: indexBy(teachers, "_id"),
+        activities: indexBy(activities, "_id"),
+      } || {},
+  };
+};
+
+const builder = imageUrlBuilder(client);
+
+const LandingPage = ({ page, site, nextEvent, schedule, teachers, activities }) => {
+  if (!page) {
+    return null;
   }
-}
 
-const builder = imageUrlBuilder(client)
-
-const LandingPage = ({page, site, nextEvent, schedule}) => {
-
-  if(!page) {
-    return null
-  }
-
-  const {
-    title = 'Missing title',
-    description,
-    content = [],
-    slug,
-  } = page;
+  const { title = "Missing title", description, content = [], slug } = page;
 
   // a bit of a hack here, sorry about this
   if (content) {
-    for(let i = 0; i < content.length; i++) {
-      if (content[i] && content[i]._type === 'timetablePlaceholder') {
+    for (let i = 0; i < content.length; i++) {
+      if (content[i] && content[i]._type === "timetablePlaceholder") {
         content[i] = schedule;
+        content[i].teachers = teachers;
+        content[i].activities = activities;
       }
     }
   }
@@ -124,7 +156,7 @@ const LandingPage = ({page, site, nextEvent, schedule}) => {
           alt: title,
         },
       ]
-    : []
+    : [];
 
   return (
     <Layout site={site} nextEvent={nextEvent}>
@@ -132,27 +164,29 @@ const LandingPage = ({page, site, nextEvent, schedule}) => {
         title={title}
         titleTemplate={`%s - ${site.title}`}
         description={`${site.description} ${description}`}
-
         canonical={site.url && `${site.url}/${slug}`}
         openGraph={{
           images: openGraphImages,
         }}
         noindex={false}
       />
-      <div className={content.length === 1 ? 'single-column-page' : 'two-column-page'}>
-      {content && <RenderSections sections={content} />}
+      <div
+        className={
+          content.length === 1 ? "single-column-page" : "two-column-page"
+        }
+      >
+        {content && <RenderSections sections={content} />}
       </div>
     </Layout>
-  )
-}
+  );
+};
 
 LandingPage.propTypes = {
   page: PropTypes.shape({
     title: PropTypes.string,
     description: PropTypes.string,
-    slug: PropTypes.shape({current: PropTypes.string }),
+    slug: PropTypes.shape({ current: PropTypes.string }),
     content: PropTypes.any,
-
   }),
   site: PropTypes.shape({
     title: PropTypes.string,
@@ -160,6 +194,6 @@ LandingPage.propTypes = {
     openGraphImage: PropTypes.any,
     header: PropTypes.array, // portable text
   }),
-}
+};
 
-export default LandingPage
+export default LandingPage;

@@ -1,27 +1,30 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import Head from 'next/head'
+import React from "react";
+import PropTypes from "prop-types";
+import Head from "next/head";
 
-import {LogoJsonLd} from 'next-seo'
-import Header from './Header'
-import Footer from './Footer'
-import styles from './Layout.module.css'
+import { LogoJsonLd } from "next-seo";
+import Header from "./Header";
+import Footer from "./Footer";
+import styles from "./Layout.module.css";
 
 function Layout(props) {
-  const {site, nextEvent, children} = props
+  const { site, nextEvent, children } = props;
 
   if (!site) {
-    console.error('Missing site config')
-    return <div>Missing config</div>
+    console.error("Missing site config");
+    return <div>Missing config</div>;
   }
 
-  const { keywords, header, footerNavItems, footer, logo} = site
+  const { keywords, header, footerNavItems, footer, logo } = site;
 
   return (
     <>
       <Head>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width, viewport-fit=cover" />
-        <meta name="keywords" content={keywords.join(', ')} />
+        <meta
+          name="viewport"
+          content="initial-scale=1.0, width=device-width, viewport-fit=cover"
+        />
+        <meta name="keywords" content={keywords.join(", ")} />
       </Head>
       <div className={styles.maingrid}>
         <Header content={header} nextEvent={nextEvent} logo={logo} />
@@ -29,7 +32,7 @@ function Layout(props) {
         <Footer navItems={footerNavItems} text={footer} />
       </div>
     </>
-  )
+  );
 }
 
 Layout.propTypes = {
@@ -46,6 +49,6 @@ Layout.propTypes = {
       }),
     }),
   }),
-}
+};
 
-export default Layout
+export default Layout;

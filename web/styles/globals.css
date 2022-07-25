@@ -4,6 +4,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background-color: #eee;
 }
 
 * {
@@ -13,7 +14,7 @@ body {
 @media screen and (min-width: 820px) {
   .two-column-page {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 25% 1fr;
     grid-column-gap: 1em;
   }
 

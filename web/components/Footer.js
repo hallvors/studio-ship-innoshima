@@ -1,29 +1,33 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import Link from 'next/link'
-import {withRouter} from 'next/router'
-import styles from './Footer.module.css'
-import SimpleBlockContent from './SimpleBlockContent'
-import {getPathFromSlug, slugParamToPath} from '../utils/urls'
+import React from "react";
+import PropTypes from "prop-types";
+import Link from "next/link";
+import { withRouter } from "next/router";
+import styles from "./Footer.module.css";
+import SimpleBlockContent from "./SimpleBlockContent";
+import { getPathFromSlug, slugParamToPath } from "../utils/urls";
 
 function Footer(props) {
-  const {navItems, text, router} = props
+  const { navItems, text, router } = props;
   return (
     <div className={styles.root}>
       <nav>
         <ul className={styles.items}>
           {navItems &&
             navItems.map((item) => {
-              const isActive = slugParamToPath(router.query.slug) === item.slug.current
+              const isActive =
+                slugParamToPath(router.query.slug) === item.slug.current;
               return (
                 <li key={item._id} className={styles.item}>
                   <Link href={getPathFromSlug(item.slug.current)}>
-                    <a data-is-active={isActive ? 'true' : 'false'} aria-current={isActive}>
+                    <a
+                      data-is-active={isActive ? "true" : "false"}
+                      aria-current={isActive}
+                    >
                       {item.title}
                     </a>
                   </Link>
                 </li>
-              )
+              );
             })}
         </ul>
       </nav>
@@ -31,7 +35,7 @@ function Footer(props) {
         <SimpleBlockContent content={text} />
       </div>
     </div>
-  )
+  );
 }
 
 Footer.propTypes = {
@@ -48,6 +52,6 @@ Footer.propTypes = {
       slug: PropTypes.string,
     }),
   }),
-}
+};
 
-export default withRouter(Footer)
+export default withRouter(Footer);

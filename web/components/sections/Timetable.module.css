@@ -28,3 +28,20 @@
     justify-content: center;
     min-height: 95px;
 }
+
+.contentgrid {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+	align-items: stretch;
+	align-content: stretch;
+    background-color: #D68031;
+    grid-gap: 1px;
+}
+
+.contentgrid>div {
+    flex: 1 1 0px;
+    background-color: #eee;
+    padding: 1em;
+}

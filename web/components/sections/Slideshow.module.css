@@ -3,7 +3,11 @@
   }
 
   .button {
-    width: "30px";
-    background: 'none';
-    border: '0px';
+    width: 30px;
+    background: none;
+    border: 0px;
+  }
+
+  .button svg {
+    fill: #D68031;
   }
