@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import styles from "./Timetable.module.css";
 import Link from "next/link";
 import Calendar from "react-calendar";
-import { parseISO, format, isPast, isAfter, isBefore } from "date-fns";
+import { parseISO, format, isPast, isAfter, isBefore, isSameDay } from "date-fns";
 import { enGB, ja } from "date-fns/locale";
 
 export default function Timetable(props) {
@@ -29,9 +29,11 @@ export default function Timetable(props) {
     // if exception covers this day, render only exception data
     if (exceptions) {
       for (let i = 0; i < exceptions.length; i++) {
+        const start = parseISO(exceptions[i].start);
+        const end = parseISO(exceptions[i].end);
         if (
-          isAfter(date, parseISO(exceptions[i].start)) &&
-          isBefore(date, parseISO(exceptions[i].end))
+          (isAfter(date, start) || isSameDay(date, start)) &&
+          (isBefore(date, end) || isSameDay(date, end))
         ) {
           cellContents = (
             <div className={styles["exception"]} key={date.getTime()}>
