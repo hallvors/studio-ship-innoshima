@@ -2,3 +2,4 @@
 /build
 /web/build
 **/node_modules
+/sanity/dist/*
