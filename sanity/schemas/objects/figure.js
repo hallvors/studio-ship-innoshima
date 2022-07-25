@@ -7,14 +7,6 @@ export default {
   },
   fields: [
     {
-      title: 'Caption',
-      name: 'caption',
-      type: 'string',
-      options: {
-        isHighlighted: true
-      }
-    },
-    {
       name: 'alt',
       type: 'string',
       title: 'Alternative text',
@@ -23,7 +15,16 @@ export default {
       options: {
         isHighlighted: true
       }
-    }
+    },
+    {
+      title: 'Caption',
+      description: 'Text shown below image',
+      name: 'caption',
+      type: 'string',
+      options: {
+        isHighlighted: true
+      }
+    },
   ],
   preview: {
     select: {
