@@ -34,7 +34,7 @@ const WEEKDAYS = [
 export default {
   name: 'lesson',
   icon: MdAccessTime,
-  title: 'Lesson',
+  title: 'レッスン',
   type: 'object',
   fields: [
     {

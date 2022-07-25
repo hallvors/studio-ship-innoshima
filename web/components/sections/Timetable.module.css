@@ -22,7 +22,11 @@
 
 .lesson {
     margin-top: 1em;
+}
 
+.lesson a {
+    text-decoration: none;
+    color: #d68031;
 }
 
 .exception {

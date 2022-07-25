@@ -10,13 +10,12 @@ function Links(props) {
   if (!(contents && contents.length)) {
     return null;
   }
-  console.log(site.homepage);
   return (
     <ul className={styles["linklist"]}>
       {contents.map((link) => {
-        const isActive =
-          slugParamToPath(router.query.slug) === link.slug.current;
         const isHome = link.slug.current === site.homepage.slug.current;
+        const isActive =
+          slugParamToPath(router.query.slug) === link.slug.current || (router.asPath === '/' && isHome);
         if (isActive && isHome) {
           return null;
         }
