@@ -21,7 +21,7 @@ export default {
     {
       name: 'exceptions',
       type: 'array',
-      title: 'Schedule exceptions',
+      title: 'タイムテーブルの例外',
       of: [{type: 'scheduleException'}],
     }
   ],
