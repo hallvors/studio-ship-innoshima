@@ -134,9 +134,6 @@ const LandingPage = ({ page, site, nextEvent, schedule, teachers, activities }) 
       }
     }
   }
-  if (site.globalNavItems) {
-    content.unshift(site.globalNavItems);
-  }
 
   const openGraphImages = site.openGraphImage
     ? [
@@ -176,11 +173,9 @@ const LandingPage = ({ page, site, nextEvent, schedule, teachers, activities }) 
         noindex={false}
       />
       <div
-        className={
-          content.length === 1 ? "single-column-page" : "two-column-page"
-        }
+        className={"two-column-page"}
       >
-        {content && <RenderSections sections={content} />}
+        {content && <RenderSections sections={ [site.globalNavItems].concat(content)} />}
       </div>
     </Layout>
   );

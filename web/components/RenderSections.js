@@ -41,7 +41,7 @@ function RenderSections(props) {
         }
         return (
           <section
-            key={section._key}
+            key={section._key || idx}
             className={`section-${idx} ${styles[`section-${section._type}`]}`}
           >
             <SectionComponent {...section} />
