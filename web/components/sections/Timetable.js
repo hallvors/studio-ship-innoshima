@@ -49,14 +49,14 @@ export default function Timetable(props) {
       if (lessonsByDay[weekday]) {
         cellContents = lessonsByDay[weekday].map((lesson) => (
           <div className={styles["lesson"]} key={lesson._key}>
+            {lesson.time}
             {lesson.activity && (
               <Link href={`/レッスン/${activities[lesson.activity._ref].name}`}>
                 <a>
-                  <b>{activities[lesson.activity._ref].name}</b>
+                <b>{activities[lesson.activity._ref].name}</b>
                 </a>
               </Link>
             )}{" "}
-            - {lesson.time}
             <br />
             {lesson.teacher && (
               <span>
@@ -78,7 +78,7 @@ export default function Timetable(props) {
         ].join(" ")}
       >
         <div className={styles["date"]}>{date.getDate()}</div>
-        <div className={styles["dateDetails"]}>{cellContents}</div>
+        {cellContents}
       </div>
     );
   }
@@ -87,19 +87,26 @@ export default function Timetable(props) {
     <div className={styles["timetable"]}>
       <h2>タイムテーブル</h2>
       <Calendar
+        locale="ja-jp"
         defaultActiveStartDate={new Date(`${isoMonth}-15`)}
         formatDay={formatDay}
+        className={styles["react-calendar"]}
+        tileClassName={styles["react-calendar__tile"]}
       />
     </div>
   );
 }
 
 Timetable.propTypes = {
-  lessons: PropTypes.arrayOf({
+  lessons: PropTypes.arrayOf(PropTypes.shape({
     activity: PropTypes.shape({ _ref: PropTypes.string }),
     teacher: PropTypes.shape({ _ref: PropTypes.string }),
     time: PropTypes.string,
     weekday: PropTypes.string,
-  }),
-  exceptions: PropTypes.arrayOf(),
+  })),
+  exceptions: PropTypes.arrayOf(PropTypes.shape({
+    start: PropTypes.string,
+    end: PropTypes.string,
+    description: PropTypes.string,
+  })),
 };
