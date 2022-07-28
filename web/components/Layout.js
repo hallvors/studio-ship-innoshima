@@ -28,7 +28,7 @@ function Layout(props) {
       </Head>
       <div className={styles.maingrid}>
         <Header content={header} nextEvent={nextEvent} logo={logo} />
-        <div className="content">{children}</div>
+        {children}
         <Footer text={footer} />
       </div>
     </>

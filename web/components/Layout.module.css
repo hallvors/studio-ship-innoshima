@@ -1,5 +1,6 @@
 .maingrid {
     /* header, content, footer grid */
     display: grid;
-    grid-template-rows: 1fr 90% 1fr;
+    grid-template-rows: 1fr 70% 1fr;
+    grid-column-gap: 0;
 }

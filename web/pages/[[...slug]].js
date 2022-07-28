@@ -19,8 +19,11 @@ import { getSlugVariations, slugParamToPath } from "../utils/urls";
  * From the received params.slug, we're able to query Sanity for the route coresponding to the currently requested path.
  */
 export const getServerSideProps = async ({ params }) => {
+  console.log({params})
   const slug = slugParamToPath(params?.slug);
+  console.log({derived: slug})
   const slugParts = slug.split(/\//g);
+  console.log({slugParts})
   // TODO: support a type/ID mode for teacher, event, activity?
   let site = await client.fetch(
     groq`*[_id == "global-config"][0]{

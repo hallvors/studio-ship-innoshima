@@ -1,8 +1,9 @@
 .header {
     text-align: center;
-    border-top: 1px solid #D68031;
-    border-bottom: 1px solid #D68031;
+    border: 1px solid #D68031;
     letter-spacing: 1vw;
+    background-color: azure;
+    padding: 1em 0;
 }
 .logo {
     float: left;

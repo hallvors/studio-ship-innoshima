@@ -11,6 +11,22 @@ body {
   box-sizing: border-box;
 }
 
+a:link {
+  color: #D68031;
+}
+
+a:visited {
+  color: #d58a44;
+}
+
+.two-column-page {
+  background-color: azure;
+  border-left: 1px solid #D68031;
+  border-right: 1px solid #D68031;
+  padding: 1em 0;
+}
+
+
 @media screen and (min-width: 820px) {
   .two-column-page {
     display: grid;
@@ -33,9 +49,7 @@ body {
   body {
     margin: 2vh 5vw;
     padding: 0;
-    border-left: 1px solid #D68031;
-    border-right: 1px solid #D68031;
-    border-bottom: 1px solid #D68031;
+    background-color:azure;
   }
 }
 
@@ -48,8 +62,30 @@ h1 {
   font-weight: lighter;
 }
 
-.react-calendar__tile {
-  padding-left: 0;
-  padding-right: 0;
-  background-color: azure;
+/* No module-friendly override for this class? */
+.react-calendar__navigation {
+  text-align: center;
+  padding: 1em 0;
+}
+
+.react-calendar__month-view__weekdays {
+  text-align: center;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  border-left: 1px solid #D68031;
+  padding-bottom: 0;
+}
+
+.react-calendar__month-view__weekdays__weekday:first-child {
+  border-left: none;
+}
+
+.react-calendar__month-view__weekdays abbr {
+  text-decoration: none;
+}
+
+.react-slideshow-container .nav.default-nav
+{
+  display: none;
 }
