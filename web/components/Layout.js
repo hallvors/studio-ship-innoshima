@@ -29,8 +29,8 @@ function Layout(props) {
       <div className={styles.maingrid}>
         <Header content={header} nextEvent={nextEvent} logo={logo} />
         {children}
-        <Footer text={footer} />
       </div>
+      <Footer text={footer} />
     </>
   );
 }

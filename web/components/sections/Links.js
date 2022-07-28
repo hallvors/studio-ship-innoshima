@@ -24,8 +24,11 @@ function Links(props) {
             key={link.slug.current}
             className={[styles.item, isActive ? styles.active : ""].join(" ")}
           >
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+        <path d="M512 256L270 42.6v138.2H0v150.6h270v138z" />
+      </svg>
             <Link href={isHome ? "/" : getPathFromSlug(link.slug.current)}>
-              <a>{link.title}</a>
+            <a>{link.title}</a>
             </Link>
           </li>
         );
