@@ -4,6 +4,7 @@
   letter-spacing: .5vw;
   margin-bottom: .5em;
   border: 1px solid #D68031;
+  border-radius: 0 0 2em 2em;
 }
 
 .items {

@@ -8,6 +8,6 @@
     border: 0px;
   }
 
-  .button svg {
-    fill: #D68031;
-  }
+.slide img {
+    border-radius: 2em;
+}
