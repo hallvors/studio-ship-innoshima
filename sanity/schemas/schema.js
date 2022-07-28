@@ -6,7 +6,6 @@ import schemaTypes from 'all:part:@sanity/base/schema-type'
 
 // Document types
 import activity from './documents/activity';
-import event from './documents/event';
 import page from './documents/page';
 import person from './documents/person';
 import schedule from './documents/schedule';
@@ -33,7 +32,6 @@ export default createSchema({
   types: schemaTypes.concat([
     // pages
     activity,
-    event,
     page,
     person,
     schedule,
