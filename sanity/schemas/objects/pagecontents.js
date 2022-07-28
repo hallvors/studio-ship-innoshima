@@ -4,8 +4,8 @@ export default {
     type: 'array',
     of: [
         {type: 'textbox'},
-        { type: 'figure' },
         { type: 'slideshow' },
+        { type: 'figure' },
         { type: 'links' },
         { type: 'timetablePlaceholder' },
     ]
