@@ -14,7 +14,6 @@ function Figure(image) {
   if (!(image && image.asset)) {
     return null;
   }
-  console.log(image);
 
   return (
     <figure className={styles.content}>
