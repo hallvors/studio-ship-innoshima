@@ -10,7 +10,7 @@ export default () =>
     .items([
       S.documentListItem().id('global-config').schemaType('siteSettings').title('サイトの設定'),
       S.documentTypeListItem('person').title('先生'),
-      S.documentTypeListItem('activity').title('活動'),
+      S.documentTypeListItem('activity').title('内容の紹介'),
       S.documentListItem().id('global-schedule').schemaType('schedule').title('タイムテーブル'),
       S.documentTypeListItem('page').title('ページ'),
       ...S.documentTypeListItems().filter(hiddenDocTypes),
