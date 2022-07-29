@@ -7,7 +7,7 @@ import React from "react";
 import client from "../client";
 import Layout from "../components/Layout";
 import RenderSections from "../components/RenderSections";
-import { getDataPromisesForRoute } from "../utils/queries";
+import { getDataPromisesForRoute, getPlaceholderData } from "../utils/queries";
 
 import { slugParamToPath } from "../utils/urls";
 
@@ -19,9 +19,9 @@ import { slugParamToPath } from "../utils/urls";
  * From the received params.slug, we're able to query Sanity for the route coresponding to the currently requested path.
  */
 export const getServerSideProps = async ({ params }) => {
-  console.log({params})
+  console.log({ params });
   const slug = slugParamToPath(params?.slug);
-  console.log({derived: slug})
+  console.log({ derived: slug });
   const slugParts = slug.split(/\//g);
   // TODO: support a type/ID mode for teacher, event, activity?
   let site = await client.fetch(
@@ -36,10 +36,7 @@ export const getServerSideProps = async ({ params }) => {
 
   const promises = getDataPromisesForRoute(slug, site);
 
-  const routeData = await Promise.all(
-    promises
-  );
-
+  const routeData = await Promise.all(promises);
 
   if (!(routeData.length && routeData[0])) {
     return {
@@ -47,55 +44,42 @@ export const getServerSideProps = async ({ params }) => {
     };
   }
 
-  function indexBy(ar, prop) {
-    return ar.reduce((accumulated, current) => {
-      accumulated[current[prop]] = current;
-      return accumulated;
-    }, {});
-  }
-
   return {
-    props:
-      {
-        site,
-        mainContent: routeData[0],
-        supportingData: routeData.slice(1),
-        slugParts,
-      },
+    props: {
+      site,
+      mainContent: routeData[0],
+      supportingData: routeData.slice(1),
+      slugParts,
+    },
   };
 };
 
 const builder = imageUrlBuilder(client);
 
-const LandingPage = ({
+const LandingPage = async ({
   mainContent,
   site,
   supportingData,
   slugParts,
 }) => {
-  if (!(mainContent)) {
-    console.log('wot, no content?', {mainContent})
+  if (!mainContent) {
+    console.log("wot, no content?", { mainContent });
     return null;
   }
-
+  console.log(mainContent);
   let title, content, slug;
-  if (mainContent._type === 'page') {
+  if (mainContent._type === "page") {
     title = mainContent.title;
     content = mainContent.content;
     slug = mainContent.slug;
-  } else if (['person', 'activity'].includes(mainContent._type)) {
+  } else if (["person", "activity"].includes(mainContent._type)) {
     title = mainContent.name;
     content = mainContent;
-    slug = slugParts.join('/');
+    slug = slugParts.join("/");
   }
 
-  // a bit of a hack here, sorry about this
-  if (content) {
-    for (let i = 0; i < content.length; i++) {
-      if (content[i] && content[i]._type === "timetablePlaceholder" && supportingData.length && supportingData[0]._type === 'schedule') {
-        content[i] = supportingData[0];
-      }
-    }
+  if (content && content.length) {
+    await getPlaceholderData(content);
   }
 
   const openGraphImages = site.openGraphImage

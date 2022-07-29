@@ -12,6 +12,7 @@ import schedule from './documents/schedule';
 import siteSettings from './documents/siteSettings';
 
 // objects / components
+import activitiesListPlaceholder from './objects/activitiesListPlaceholder';
 import complexPortableText from './objects/complexPortableText';
 import figure from './objects/figure';
 import lesson from './objects/lesson';
@@ -20,6 +21,7 @@ import pagecontents from './objects/pagecontents';
 import scheduleException from './objects/scheduleException';
 import simplePortableText from './objects/simplePortableText';
 import slideshow from './objects/slideshow';
+import teachersListPlaceholder from './objects/teachersListPlaceholder';
 import textbox from './objects/textbox';
 import timetablePlaceholder from './objects/timetablePlaceholder';
 
@@ -38,6 +40,7 @@ export default createSchema({
     siteSettings,
 
     // objects
+    activitiesListPlaceholder,
     complexPortableText,
     figure,
     lesson,
@@ -46,6 +49,7 @@ export default createSchema({
     scheduleException,
     simplePortableText,
     slideshow,
+    teachersListPlaceholder,
     textbox,
     timetablePlaceholder,
   ]),

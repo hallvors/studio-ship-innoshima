@@ -3,14 +3,19 @@ import PropTypes from "prop-types";
 import styles from "./Timetable.module.css";
 import Link from "next/link";
 import Calendar from "react-calendar";
-import { parseISO, format, isPast, isAfter, isBefore, isSameDay } from "date-fns";
+import {
+  parseISO,
+  format,
+  isPast,
+  isAfter,
+  isBefore,
+  isSameDay,
+} from "date-fns";
 import { enGB, ja } from "date-fns/locale";
 
 export default function Timetable(props) {
   const { lessons, exceptions } = props;
-  console.log(
-    JSON.stringify({ lessons, exceptions }, null, 2)
-  );
+  console.log(JSON.stringify({ lessons, exceptions }, null, 2));
   const now = new Date();
   now.setDate(15); // mid-month avoids TZ-related off-by-one errors
   const isoMonth = now.toISOString().split(/-/g).slice(0, 2).join("-");
@@ -37,10 +42,10 @@ export default function Timetable(props) {
         ) {
           if (exceptions[i].all) {
             cellContents = (
-                <div className={styles["exception"]} key={date.getTime()}>
-                  <span>{exceptions[i].title}</span>
-                </div>
-              );
+              <div className={styles["exception"]} key={date.getTime()}>
+                <span>{exceptions[i].title}</span>
+              </div>
+            );
           }
         }
       }
@@ -55,7 +60,7 @@ export default function Timetable(props) {
             {lesson.activity && (
               <Link href={`/レッスン/${lesson.activity}`}>
                 <a>
-                <b>{lesson.activity}</b>
+                  <b>{lesson.activity}</b>
                 </a>
               </Link>
             )}{" "}
@@ -100,15 +105,19 @@ export default function Timetable(props) {
 }
 
 Timetable.propTypes = {
-  lessons: PropTypes.arrayOf(PropTypes.shape({
-    activity:  PropTypes.string,
-    teacher:  PropTypes.string,
-    time: PropTypes.string,
-    weekday: PropTypes.string,
-  })),
-  exceptions: PropTypes.arrayOf(PropTypes.shape({
-    start: PropTypes.string,
-    end: PropTypes.string,
-    description: PropTypes.string,
-  })),
+  lessons: PropTypes.arrayOf(
+    PropTypes.shape({
+      activity: PropTypes.string,
+      teacher: PropTypes.string,
+      time: PropTypes.string,
+      weekday: PropTypes.string,
+    })
+  ),
+  exceptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      start: PropTypes.string,
+      end: PropTypes.string,
+      description: PropTypes.string,
+    })
+  ),
 };

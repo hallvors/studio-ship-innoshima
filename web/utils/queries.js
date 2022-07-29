@@ -16,55 +16,76 @@ const contentProjection = groq`"content": content[]{
     }
    }`;
 
-  const imageProjection = groq`{
+const imageProjection = groq`{
     ..., "image": image{..., "dimensions":asset->metadata.dimensions}
   }`;
 
 export function getDataPromisesForRoute(slug, siteSettings) {
-    const promises = [];
-    const slugParts = (slug || "").split(/\//g);
-    if (slug === "/" || slug === "") {
-        // Requesting /
-        promises.push(
-          client.fetch(
-            groq`*[_type == "page" && _id == $id][0]{..., ${contentProjection}}`,
-            { id: siteSettings.homepage._id }
-          )
-        );
-      } else if (slugParts.length === 1) {
-        promises.push(
-          client.fetch(
-            // Get the route document with one of the possible slugs for the given requested path
-            groq`*[_type == "page" && slug.current in $possibleSlugs][0]{..., ${contentProjection}}`,
-            { possibleSlugs: getSlugVariations(slug) }
-          )
-        );
-        // We may need supporting data
-        if (slugParts[0] === 'タイムテーブル') {
-          promises.push(client.fetch(groq`*[_id == 'global-schedule'][0] {
-          _type,
-          exceptions,
-          "lessons": lessons[] {
-            weekday, time,
-            "activity": activity->name,
-            "teacher": teacher->name,
-          }
-        }`))
+  const promises = [];
+  const slugParts = (slug || "").split(/\//g);
+  if (slug === "/" || slug === "") {
+    // Requesting /
+    promises.push(
+      client.fetch(
+        groq`*[_type == "page" && _id == $id][0]{..., ${contentProjection}}`,
+        { id: siteSettings.homepage._id }
+      )
+    );
+  } else if (slugParts.length === 1) {
+    promises.push(
+      client.fetch(
+        // Get the route document with one of the possible slugs for the given requested path
+        groq`*[_type == "page" && slug.current in $possibleSlugs][0]{..., ${contentProjection}}`,
+        { possibleSlugs: getSlugVariations(slug) }
+      )
+    );
+  } else {
+    // if we have a multi-level slug, say
+    // [ 'レッスン', 'バレエー' ]
+    const types = {
+      レッスン: "activity",
+      先生: "person",
+    };
+    if (types[slugParts[0]]) {
+      promises.push(
+        client.fetch(
+          groq`*[_type == $type && name == $name][0]${imageProjection}`,
+          { type: types[slugParts[0]], name: slugParts[1] }
+        )
+      );
+    }
+  }
+  return promises;
+}
 
-        }
-      } else {
-        // if we have a multi-level slug, say
-        // [ 'レッスン', 'バレエー' ]
-        const types = {
-            'レッスン': 'activity',
-            '先生': 'person'
-        }
-        if (types[slugParts[0]]) {
-            promises.push(
-                client.fetch(groq`*[_type == $type && name == $name][0]${imageProjection}`,
-                {type: types[slugParts[0]], name: slugParts[1]}),
-            )
-        }
+export async function getPlaceholderData(content) {
+  const types = {
+    activitiesListPlaceholder: "activity",
+    teachersListPlaceholder: "person",
+  };
+
+  if (content) {
+    for (let i = 0; i < content.length; i++) {
+      if (content[i] && content[i]._type === "timetablePlaceholder") {
+        content[i] = await client.fetch(groq`*[_id == 'global-schedule'][0] {
+                _type,
+                exceptions,
+                "lessons": lessons[] {
+                  weekday, time,
+                  "activity": activity->name,
+                  "teacher": teacher->name,
+                }
+              }`);
+      } else if (
+        content[i] &&
+        (content[i]._type === "teachersListPlaceholder" ||
+          content[i]._type === "activitiesListPlaceholder")
+      ) {
+        content[i] = await client.fetch(
+          groq`*[_type == $type][0]${imageProjection}`,
+          { type: types[content[i]._type] }
+        );
       }
-    return promises;
+    }
+  }
 }

@@ -3,8 +3,7 @@ import PropTypes from "prop-types";
 import * as SectionComponents from "./sections";
 import Figure from "./Figure";
 import SimpleBlockContent from "./SimpleBlockContent";
-import Person from "./sections/Person";
-import Activity from "./sections/Activity";
+import GeneralList from "./GeneralList";
 import styles from "./RenderSections.module.css";
 
 function resolveSections(section) {
@@ -18,12 +17,15 @@ function resolveSections(section) {
     case "links":
       return SectionComponents.Links;
     case "person":
-        return SectionComponents.Person;
+      return SectionComponents.Person;
     case "activity":
-        return SectionComponents.Activity;
+      return SectionComponents.Activity;
     case "timetablePlaceholder":
     case "schedule":
       return SectionComponents.Timetable;
+    default:
+      // assumed to be a list of teachers or activities
+      return GeneralList;
   }
 
   console.error("Cant find section", section); // eslint-disable-line no-console

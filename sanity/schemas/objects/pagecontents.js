@@ -8,5 +8,7 @@ export default {
         { type: 'figure' },
         { type: 'links' },
         { type: 'timetablePlaceholder' },
+        { type: 'teachersListPlaceholder' },
+        { type: 'activitiesListPlaceholder' },
     ]
 }

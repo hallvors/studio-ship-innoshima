@@ -1,0 +1,14 @@
+@media screen and (min-width: 820px) {
+    .list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .card {
+        flex-basis: 50%;
+    }
+}
+.card {
+
+}
