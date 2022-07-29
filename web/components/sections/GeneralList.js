@@ -3,12 +3,17 @@ import Activity from "./Activity";
 import styles from "./GeneralList.module.css";
 
 export default function GeneralList(props) {
-  if (props && props.length) {
+  const keys = Object.keys(props);
+  if (keys && keys.length) {
     return (
       <div className={styles.list}>
-        {props.map((item) => (
+        {keys.map((item) => (
           <div className={styles.card}>
-            {item._type === "person" ? <Person {...item} /> : <Activity />}
+            {props[item]._type === "person" ? (
+              <Person {...props[item]} />
+            ) : (
+              <Activity {...props[item]} />
+            )}
           </div>
         ))}
       </div>

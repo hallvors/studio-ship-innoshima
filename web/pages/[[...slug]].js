@@ -44,30 +44,35 @@ export const getServerSideProps = async ({ params }) => {
     };
   }
 
+  if (routeData[0] && routeData[0]._type === "page") {
+    console.log("before placeholder");
+    console.log(routeData[0].content);
+    if (routeData[0].content && routeData[0].content.length) {
+      await getPlaceholderData(routeData[0].content);
+    }
+
+    console.log("got placeholder data?");
+    console.log(routeData[0].content);
+  }
+
   return {
     props: {
       site,
       mainContent: routeData[0],
-      supportingData: routeData.slice(1),
-      slugParts,
+      slug,
     },
   };
 };
 
 const builder = imageUrlBuilder(client);
 
-const LandingPage = async ({
-  mainContent,
-  site,
-  supportingData,
-  slugParts,
-}) => {
+const LandingPage = ({ mainContent, site, slug }) => {
   if (!mainContent) {
     console.log("wot, no content?", { mainContent });
     return null;
   }
   console.log(mainContent);
-  let title, content, slug;
+  let title, content;
   if (mainContent._type === "page") {
     title = mainContent.title;
     content = mainContent.content;
@@ -75,11 +80,6 @@ const LandingPage = async ({
   } else if (["person", "activity"].includes(mainContent._type)) {
     title = mainContent.name;
     content = mainContent;
-    slug = slugParts.join("/");
-  }
-
-  if (content && content.length) {
-    await getPlaceholderData(content);
   }
 
   const openGraphImages = site.openGraphImage

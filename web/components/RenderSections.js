@@ -61,11 +61,14 @@ function RenderSections(props) {
 
 RenderSections.propTypes = {
   sections: PropTypes.arrayOf(
-    PropTypes.shape({
-      _type: PropTypes.string,
-      _key: PropTypes.string,
-      section: PropTypes.instanceOf(PropTypes.object),
-    })
+    PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.shape({
+        _type: PropTypes.string,
+        _key: PropTypes.string,
+        section: PropTypes.instanceOf(PropTypes.object),
+      }),
+    ])
   ),
 };
 

@@ -67,7 +67,8 @@ export async function getPlaceholderData(content) {
   if (content) {
     for (let i = 0; i < content.length; i++) {
       if (content[i] && content[i]._type === "timetablePlaceholder") {
-        content[i] = await client.fetch(groq`*[_id == 'global-schedule'][0] {
+        const timetable =
+          await client.fetch(groq`*[_id == 'global-schedule'][0] {
                 _type,
                 exceptions,
                 "lessons": lessons[] {
@@ -76,15 +77,17 @@ export async function getPlaceholderData(content) {
                   "teacher": teacher->name,
                 }
               }`);
+        content[i] = timetable;
       } else if (
         content[i] &&
         (content[i]._type === "teachersListPlaceholder" ||
           content[i]._type === "activitiesListPlaceholder")
       ) {
-        content[i] = await client.fetch(
-          groq`*[_type == $type][0]${imageProjection}`,
+        const list = await client.fetch(
+          groq`*[_type == $type]${imageProjection}`,
           { type: types[content[i]._type] }
         );
+        content[i] = list;
       }
     }
   }
