@@ -7,9 +7,9 @@ import { parseISO, format, isPast, isAfter, isBefore, isSameDay } from "date-fns
 import { enGB, ja } from "date-fns/locale";
 
 export default function Timetable(props) {
-  const { lessons, exceptions, teachers, activities } = props;
+  const { lessons, exceptions } = props;
   console.log(
-    JSON.stringify({ lessons, exceptions, teachers, activities }, null, 2)
+    JSON.stringify({ lessons, exceptions }, null, 2)
   );
   const now = new Date();
   now.setDate(15); // mid-month avoids TZ-related off-by-one errors
@@ -51,17 +51,17 @@ export default function Timetable(props) {
           <div className={styles["lesson"]} key={lesson._key}>
             {lesson.time}
             {lesson.activity && (
-              <Link href={`/レッスン/${activities[lesson.activity._ref].name}`}>
+              <Link href={`/レッスン/${lesson.activity}`}>
                 <a>
-                <b>{activities[lesson.activity._ref].name}</b>
+                <b>{lesson.activity}</b>
                 </a>
               </Link>
             )}{" "}
             <br />
             {lesson.teacher && (
               <span>
-                <Link href={`/先生/${teachers[lesson.teacher._ref].name}`}>
-                  <a>{teachers[lesson.teacher._ref].name}</a>
+                <Link href={`/先生/${lesson.teacher}`}>
+                  <a>{lesson.teacher}</a>
                 </Link>
               </span>
             )}
@@ -99,8 +99,8 @@ export default function Timetable(props) {
 
 Timetable.propTypes = {
   lessons: PropTypes.arrayOf(PropTypes.shape({
-    activity: PropTypes.shape({ _ref: PropTypes.string }),
-    teacher: PropTypes.shape({ _ref: PropTypes.string }),
+    activity:  PropTypes.string,
+    teacher:  PropTypes.string,
     time: PropTypes.string,
     weekday: PropTypes.string,
   })),

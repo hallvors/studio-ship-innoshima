@@ -7,9 +7,9 @@ import React from "react";
 import client from "../client";
 import Layout from "../components/Layout";
 import RenderSections from "../components/RenderSections";
-import RichTextWithOptionalPhoto from "../components/RichTextWithOptionalPhoto";
+import { getDataPromisesForRoute } from "../utils/queries";
 
-import { getSlugVariations, slugParamToPath } from "../utils/urls";
+import { slugParamToPath } from "../utils/urls";
 
 /**
  * Fetches data for our pages.
@@ -23,7 +23,6 @@ export const getServerSideProps = async ({ params }) => {
   const slug = slugParamToPath(params?.slug);
   console.log({derived: slug})
   const slugParts = slug.split(/\//g);
-  console.log({slugParts})
   // TODO: support a type/ID mode for teacher, event, activity?
   let site = await client.fetch(
     groq`*[_id == "global-config"][0]{
@@ -35,83 +34,14 @@ export const getServerSideProps = async ({ params }) => {
   );
   // site has title, description, footer, header, homepage (ref), keywords
 
-  const contentProjection = groq`"content": content[]{
-    ...,
-      _type == 'links' => {
-        ...,
-      "contents": contents[]->{title, slug, _key}
-    },
-    _type == 'figure' => {
-      ..., "dimensions":asset->metadata.dimensions
-    },
-    _type == 'slideshow' => {
-      ..., "images": images[]{..., "dimensions":asset->metadata.dimensions}
-    }
-   }`;
+  const promises = getDataPromisesForRoute(slug, site);
 
-  const imageProjection = groq`{
-    ..., "image": image{..., "dimensions":asset->metadata.dimensions}
-  }`;
-
-  const promises = [
-    client.fetch(groq`
-      *[_type == 'event' && defined(start) && start < now()] |
-      order(start desc) [0] {_id, title, start}
-    `),
-    client.fetch(groq`*[_id == 'global-schedule'][0] {
-      _type,
-      exceptions,
-      "lessons": lessons[] {
-        weekday, time, activity, teacher
-      }
-    }`),
-    client.fetch(groq`*[_type == 'person']${imageProjection}`),
-    client.fetch(groq`*[_type == 'activity']${imageProjection}`),
-  ];
-
-  if (slug === "/") {
-    promises.push(
-      client.fetch(
-        groq`*[_type == "page" && _id == $id][0]{..., ${contentProjection}}`,
-        { id: site.homepage._id }
-      )
-    );
-  } else if (slugParts.length === 1) {
-    promises.push(
-      client.fetch(
-        // Get the route document with one of the possible slugs for the given requested path
-        groq`*[_type == "page" && slug.current in $possibleSlugs][0]{..., ${contentProjection}}`,
-        { possibleSlugs: getSlugVariations(slug) }
-      )
-    );
-  } else {
-    // if we have a multi-level slug, say
-    // [ 'レッスン', 'バレエー' ]
-    // ..we get the data here already
-    promises.push(null);
-  }
-
-  const [nextEvent, schedule, teachers, activities, page] = await Promise.all(
+  const routeData = await Promise.all(
     promises
   );
-  let nonPageContent = null;
 
-  if (!page && slugParts.length === 2) {
-    switch (slugParts[0]) {
-      case "レッスン":
-        nonPageContent = activities.find(
-          (activity) => activity.name === slugParts[1]
-        );
-        break;
-      case "先生":
-        nonPageContent = teachers.find(
-          (teacher) => teacher.name === slugParts[1]
-        );
-        break;
-    }
-  }
 
-  if (!page?._type === "page" && !nonPageContent) {
+  if (!(routeData.length && routeData[0])) {
     return {
       notFound: true,
     };
@@ -128,49 +58,42 @@ export const getServerSideProps = async ({ params }) => {
     props:
       {
         site,
-        page,
-        nonPageContent,
-        nextEvent,
-        schedule,
-        teachers: indexBy(teachers, "_id"),
-        activities: indexBy(activities, "_id"),
-      } || {},
+        mainContent: routeData[0],
+        supportingData: routeData.slice(1),
+        slugParts,
+      },
   };
 };
 
 const builder = imageUrlBuilder(client);
 
 const LandingPage = ({
-  page,
-  nonPageContent,
+  mainContent,
   site,
-  nextEvent,
-  schedule,
-  teachers,
-  activities,
+  supportingData,
+  slugParts,
 }) => {
-  if (!(page || nonPageContent)) {
+  if (!(mainContent)) {
+    console.log('wot, no content?', {mainContent})
     return null;
   }
 
   let title, content, slug;
-  if (page) {
-    title = page.title;
-    content = page.content;
-    slug = page.slug;
-  } else {
-    title = null;
-    content = null;
-    slug = null;
+  if (mainContent._type === 'page') {
+    title = mainContent.title;
+    content = mainContent.content;
+    slug = mainContent.slug;
+  } else if (['person', 'activity'].includes(mainContent._type)) {
+    title = mainContent.name;
+    content = mainContent;
+    slug = slugParts.join('/');
   }
 
   // a bit of a hack here, sorry about this
   if (content) {
     for (let i = 0; i < content.length; i++) {
-      if (content[i] && content[i]._type === "timetablePlaceholder") {
-        content[i] = schedule;
-        content[i].teachers = teachers;
-        content[i].activities = activities;
+      if (content[i] && content[i]._type === "timetablePlaceholder" && supportingData.length && supportingData[0]._type === 'schedule') {
+        content[i] = supportingData[0];
       }
     }
   }
@@ -200,7 +123,7 @@ const LandingPage = ({
       ]
     : [];
   return (
-    <Layout site={site} nextEvent={nextEvent}>
+    <Layout site={site}>
       <NextSeo
         title={title}
         titleTemplate={`%s - ${site.title}`}
@@ -217,16 +140,6 @@ const LandingPage = ({
             sections={[site.globalNavItems].concat(content)}
             site={site}
           />
-        )}
-        {nonPageContent && (
-          <>
-            <RenderSections sections={[site.globalNavItems]} site={site} />
-            <RichTextWithOptionalPhoto
-              title={nonPageContent.name}
-              image={nonPageContent.image}
-              description={nonPageContent.bio || nonPageContent.description}
-            />
-          </>
         )}
       </div>
     </Layout>

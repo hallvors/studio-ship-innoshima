@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import * as SectionComponents from "./sections";
 import Figure from "./Figure";
 import SimpleBlockContent from "./SimpleBlockContent";
+import Person from "./sections/Person";
+import Activity from "./sections/Activity";
 import styles from "./RenderSections.module.css";
 
 function resolveSections(section) {
@@ -15,6 +17,10 @@ function resolveSections(section) {
       return SectionComponents.Slideshow;
     case "links":
       return SectionComponents.Links;
+    case "person":
+        return SectionComponents.Person;
+    case "activity":
+        return SectionComponents.Activity;
     case "timetablePlaceholder":
     case "schedule":
       return SectionComponents.Timetable;
