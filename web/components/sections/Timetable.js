@@ -10,15 +10,13 @@ import {
   isAfter,
   isBefore,
   isSameDay,
+  getWeek,
 } from "date-fns";
 import { enGB, ja } from "date-fns/locale";
 
 export default function Timetable(props) {
   const { lessons, exceptions } = props;
   console.log(JSON.stringify({ lessons, exceptions }, null, 2));
-  const now = new Date();
-  now.setDate(15); // mid-month avoids TZ-related off-by-one errors
-  const isoMonth = now.toISOString().split(/-/g).slice(0, 2).join("-");
 
   const lessonsByDay = {};
   for (let i = 0; i < lessons.length; i++) {
@@ -31,6 +29,7 @@ export default function Timetable(props) {
   function formatDay(locale, date) {
     let cellContents = null;
     const relevantExceptions = [];
+    const now = new Date();
 
     // if exception covers this day, render only exception data
     if (exceptions) {
@@ -91,11 +90,14 @@ export default function Timetable(props) {
       }
     }
 
+    const isWeekInThePast = getWeek(date) < getWeek(now) || (date.getDay() === 0 &&  getWeek(date) === getWeek(now));
+
     return (
       <div
         className={[
           styles["datecell"],
-          isPast(date) && !isSameDay(date, new Date()) ? styles["past"] : "",
+          isPast(date) && !isSameDay(date, now) ? styles["past"] : "",
+          isWeekInThePast ? styles["pastweek"] : "",
         ].join(" ")}
       >
         <div className={styles["date"]}>{date.getDate()}</div>
@@ -109,7 +111,7 @@ export default function Timetable(props) {
       <h2>タイムテーブル</h2>
       <Calendar
         locale="ja-jp"
-        defaultActiveStartDate={new Date(`${isoMonth}-15`)}
+        defaultActiveStartDate={new Date}
         formatDay={formatDay}
         className={styles["react-calendar"]}
         tileClassName={styles["react-calendar__tile"]}
