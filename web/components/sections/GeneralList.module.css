@@ -1,15 +1,11 @@
-@media screen and (min-width: 820px) {
-    .list {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
-    .card {
-        flex-basis: 45%;
-        padding-bottom: 2em;
-    }
+.list {
 }
 .card {
-
+    flex-basis: 100%;
+    padding-bottom: 2em;
+    margin-bottom: 2em;
+    border-bottom: 1px solid #d68031;
+}
+.card:last-child {
+    border: none;
 }

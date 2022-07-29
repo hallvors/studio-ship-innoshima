@@ -12,7 +12,9 @@ export default function RichTextWithOptionalPhoto(props) {
           <Figure {...props.image} />
         </div>
       )}
+      <div className={styles.description}>
       {props.description && <SimpleBlockContent content={props.description} />}
+      </div>
     </div>
   );
 }

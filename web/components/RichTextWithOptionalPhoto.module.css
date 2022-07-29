@@ -1,8 +1,15 @@
 .container {
-    clear: both;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+}
+.container h3 {
+    grid-column: span 2;
+}
+.description {
+    grid-column-start: 2;
 }
 .imgparent {
-    float: left;
     padding-right: 1em;
-    max-width: 40%;
+    max-width: 100%;
+    grid-column-start: 1;
 }
