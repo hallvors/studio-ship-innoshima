@@ -22,6 +22,11 @@ export default {
         type: 'date',
         title: 'End'
     },
+    {
+      name: 'all',
+      type: 'boolean',
+      title: 'Applies to all lessons',
+    }
   ],
   preview: {
     select: {

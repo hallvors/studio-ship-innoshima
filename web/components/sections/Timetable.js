@@ -35,11 +35,13 @@ export default function Timetable(props) {
           (isAfter(date, start) || isSameDay(date, start)) &&
           (isBefore(date, end) || isSameDay(date, end))
         ) {
-          cellContents = (
-            <div className={styles["exception"]} key={date.getTime()}>
-              <span>{exceptions[i].title}</span>
-            </div>
-          );
+          if (exceptions[i].all) {
+            cellContents = (
+                <div className={styles["exception"]} key={date.getTime()}>
+                  <span>{exceptions[i].title}</span>
+                </div>
+              );
+          }
         }
       }
     }
