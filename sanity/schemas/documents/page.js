@@ -23,7 +23,7 @@ export default {
       title: 'リンク',
       validation: Rule => Rule.required(),
       options: {
-        source: 'title'
+        source: (doc) => doc.title,
       }
     }
   ],
