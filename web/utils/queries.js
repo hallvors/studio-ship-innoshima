@@ -61,8 +61,8 @@ export function getDataPromisesForRoute(slug, siteSettings) {
         }
         if (types[slugParts[0]]) {
             promises.push(
-                client.fetch(groq`*[_type == $type]${imageProjection}`),
-                {type: types[slugParts[0]]}
+                client.fetch(groq`*[_type == $type && name == $name][0]${imageProjection}`,
+                {type: types[slugParts[0]], name: slugParts[1]}),
             )
         }
       }
