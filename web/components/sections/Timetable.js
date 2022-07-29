@@ -95,7 +95,7 @@ export default function Timetable(props) {
       <div
         className={[
           styles["datecell"],
-          isPast(date) ? styles["past"] : "",
+          isPast(date) && !isSameDay(date, new Date()) ? styles["past"] : "",
         ].join(" ")}
       >
         <div className={styles["date"]}>{date.getDate()}</div>
