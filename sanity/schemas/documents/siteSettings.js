@@ -66,5 +66,11 @@ export default {
       title: 'Sharing image',
       description: 'This image is shown on Facebook and other social meda sites when links are shared',
     }
-  ]
+  ],
+  preview: {
+    prepare: () => ({
+      title: 'サイトの設定',
+      media: MdSettings,
+    })
+  }
 }
