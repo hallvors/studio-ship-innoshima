@@ -45,14 +45,9 @@ export const getServerSideProps = async ({ params }) => {
   }
 
   if (routeData[0] && routeData[0]._type === "page") {
-    console.log("before placeholder");
-    console.log(routeData[0].content);
     if (routeData[0].content && routeData[0].content.length) {
       await getPlaceholderData(routeData[0].content);
     }
-
-    console.log("got placeholder data?");
-    console.log(routeData[0].content);
   }
 
   return {
@@ -71,7 +66,7 @@ const LandingPage = ({ mainContent, site, slug }) => {
     console.log("wot, no content?", { mainContent });
     return null;
   }
-  console.log(mainContent);
+
   let title, content;
   if (mainContent._type === "page") {
     title = mainContent.title;
