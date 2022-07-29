@@ -111,7 +111,7 @@ export default function Timetable(props) {
       <h2>タイムテーブル</h2>
       <Calendar
         locale="ja-jp"
-        defaultActiveStartDate={new Date}
+        defaultActiveStartDate={now}
         formatDay={formatDay}
         className={styles["react-calendar"]}
         tileClassName={styles["react-calendar__tile"]}
