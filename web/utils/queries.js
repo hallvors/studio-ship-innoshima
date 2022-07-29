@@ -23,7 +23,7 @@ const contentProjection = groq`"content": content[]{
 export function getDataPromisesForRoute(slug, siteSettings) {
     const promises = [];
     const slugParts = (slug || "").split(/\//g);
-    if (slug === "/") {
+    if (slug === "/" || slug === "") {
         // Requesting /
         promises.push(
           client.fetch(
