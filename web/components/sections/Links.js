@@ -20,6 +20,7 @@ function Links(props) {
         if (isActive && isHome) {
           return null;
         }
+        const path = getPathFromSlug(link.slug.current);
         return (
           <li
             key={link.slug.current}
@@ -28,7 +29,7 @@ function Links(props) {
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
               <path d="M512 256L270 42.6v138.2H0v150.6h270v138z" />
             </svg>
-            <Link href={isHome ? "/" : getPathFromSlug(link.slug.current)}>
+            <Link href={path} as={isHome ? "/" : path} passHref>
               <a>{link.title}</a>
             </Link>
           </li>
