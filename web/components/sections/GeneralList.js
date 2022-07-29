@@ -8,7 +8,7 @@ export default function GeneralList(props) {
     return (
       <div className={styles.list}>
         {keys.map((item) => (
-          <div className={styles.card}>
+          <div className={styles.card} key={item.name || item.title}>
             {props[item]._type === "person" ? (
               <Person {...props[item]} />
             ) : (
