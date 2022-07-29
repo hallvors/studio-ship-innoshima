@@ -1,6 +1,6 @@
-import Person from "./sections/Person";
-import Activity from "./sections/Activity";
-import styles from "GeneralList.module.css";
+import Person from "./Person";
+import Activity from "./Activity";
+import styles from "./GeneralList.module.css";
 
 export default function GeneralList(props) {
   if (props && props.length) {

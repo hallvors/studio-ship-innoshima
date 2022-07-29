@@ -30,6 +30,7 @@ export default function Timetable(props) {
 
   function formatDay(locale, date) {
     let cellContents = null;
+    let relevantExceptions = [];
 
     // if exception covers this day, render only exception data
     if (exceptions) {
