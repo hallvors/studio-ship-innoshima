@@ -30,7 +30,7 @@ export default function Timetable(props) {
 
   function formatDay(locale, date) {
     let cellContents = null;
-    let relevantExceptions = [];
+    const relevantExceptions = [];
 
     // if exception covers this day, render only exception data
     if (exceptions) {
@@ -47,6 +47,8 @@ export default function Timetable(props) {
                 <span>{exceptions[i].title}</span>
               </div>
             );
+          } else {
+            relevantExceptions.push(exceptions[i]);
           }
         }
       }
@@ -55,26 +57,37 @@ export default function Timetable(props) {
     if (!cellContents) {
       const weekday = format(date, "cccc", { locale: enGB }).toLowerCase();
       if (lessonsByDay[weekday]) {
-        cellContents = lessonsByDay[weekday].map((lesson) => (
-          <div className={styles["lesson"]} key={lesson._key}>
-            {lesson.time}
-            {lesson.activity && (
-              <Link href={`/レッスン/${lesson.activity}`}>
-                <a>
-                  <b>{lesson.activity}</b>
-                </a>
-              </Link>
-            )}{" "}
-            <br />
-            {lesson.teacher && (
-              <span>
-                <Link href={`/先生/${lesson.teacher}`}>
-                  <a>{lesson.teacher}</a>
+        cellContents = lessonsByDay[weekday].map((lesson) => {
+          if (
+            relevantExceptions.find((exception) =>
+              exception.activities.find(
+                (activity) => activity._ref === lesson.activity._id
+              )
+            )
+          ) {
+            return null;
+          }
+          return (
+            <div className={styles["lesson"]} key={lesson._key}>
+              {lesson.time}
+              {lesson.activity && (
+                <Link href={`/レッスン/${lesson.activity.name}`}>
+                  <a>
+                    <b>{lesson.activity.name}</b>
+                  </a>
                 </Link>
-              </span>
-            )}
-          </div>
-        ));
+              )}{" "}
+              <br />
+              {lesson.teacher && (
+                <span>
+                  <Link href={`/先生/${lesson.teacher}`}>
+                    <a>{lesson.teacher}</a>
+                  </Link>
+                </span>
+              )}
+            </div>
+          );
+        });
       }
     }
 

@@ -73,7 +73,7 @@ export async function getPlaceholderData(content) {
                 exceptions,
                 "lessons": lessons[] {
                   weekday, time,
-                  "activity": activity->name,
+                  "activity": activity->{_id, name},
                   "teacher": teacher->name,
                 }
               }`);

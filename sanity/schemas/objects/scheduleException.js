@@ -26,6 +26,17 @@ export default {
       name: 'all',
       type: 'boolean',
       title: 'Applies to all lessons',
+    },
+    {
+      name: 'activities',
+      type: 'array',
+      of: [{
+        type: 'reference',
+        to: [{
+          type: 'activity',
+        }]
+      }],
+      title: 'Applies to specific activity',
     }
   ],
   preview: {
