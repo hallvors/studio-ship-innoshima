@@ -1,15 +1,20 @@
 .container {
     display: grid;
-    grid-template-columns: 1fr 1.5fr;
+    grid-template-columns: 1.5fr 1fr;
 }
 .container h3 {
     grid-column: span 2;
+    text-align: left;
 }
 .description {
-    grid-column-start: 2;
+    grid-column-start: 1;
 }
 .imgparent {
     padding-right: 1em;
     max-width: 100%;
-    grid-column-start: 1;
+    grid-column-start: 2;
+}
+.hasImg{}
+.noImg{
+  grid-column: span 2;
 }

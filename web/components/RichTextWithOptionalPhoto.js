@@ -7,14 +7,14 @@ export default function RichTextWithOptionalPhoto(props) {
   return (
     <div className={styles.container}>
       {props.title && <h3>{props.title}</h3>}
+      <div className={[styles.description, props.image ? styles.hasImg : styles.noImg].join(' ')}>
+      {props.description && <SimpleBlockContent content={props.description} />}
+      </div>
       {props.image && (
         <div className={styles.imgparent}>
           <Figure {...props.image} />
         </div>
       )}
-      <div className={styles.description}>
-      {props.description && <SimpleBlockContent content={props.description} />}
-      </div>
     </div>
   );
 }

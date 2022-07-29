@@ -1,7 +1,6 @@
 .list {
 }
 .card {
-    flex-basis: 100%;
     padding-bottom: 2em;
     margin-bottom: 2em;
     border-bottom: 1px solid #d68031;
