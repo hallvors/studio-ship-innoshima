@@ -84,7 +84,7 @@ export async function getPlaceholderData(content) {
           content[i]._type === "activitiesListPlaceholder")
       ) {
         const list = await client.fetch(
-          groq`*[_type == $type]${imageProjection}`,
+          groq`*[_type == $type]| order(order, desc) |${imageProjection}`,
           { type: types[content[i]._type] }
         );
         content[i] = list;

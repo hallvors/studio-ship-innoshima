@@ -20,7 +20,13 @@ export default {
       name: 'description',
       title: '説明',
       type: 'simplePortableText'
-    }
+    },
+    {
+      name: 'order',
+      type: 'number',
+      title: 'Order in list views',
+      description: 'Lower numbers appear first',
+    },
   ],
   preview: {
     select: {
