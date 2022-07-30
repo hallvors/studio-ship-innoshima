@@ -17,7 +17,7 @@ function Header(props) {
       <div className={styles["header"]}>
         {logo && (
           <div className={styles["logo"]}>
-            <Link href="/">
+            <Link href="/" passHref>
               <a>
                 <Image
                   src={builder
