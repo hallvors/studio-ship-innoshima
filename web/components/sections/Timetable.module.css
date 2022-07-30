@@ -22,7 +22,7 @@
 .react-calendar__tile {
     padding-left: 0;
     padding-right: 0;
-    background-color: azure;
+    background-color: #efefef;
     display: flex;
     border: none;
     border-left: 1px solid #d68031;
