@@ -1,12 +1,14 @@
 import React from "react";
 import Document, { Html, Head, Main, NextScript } from "next/document";
-import client from "../client";
 
 export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="ja">
-        <Head />
+        <Head>
+        <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@300&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Rampart+One&display=swap" rel="stylesheet" />
+            </Head>
         <body>
           <Main />
           <NextScript />

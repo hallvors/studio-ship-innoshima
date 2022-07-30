@@ -66,6 +66,10 @@ export async function getPlaceholderData(content) {
 
   if (content) {
     for (let i = 0; i < content.length; i++) {
+      if (content[i] && content[i].enabled === false) {
+        content[i] = null;
+        continue;
+      }
       if (content[i] && content[i]._type === "timetablePlaceholder") {
         const timetable =
           await client.fetch(groq`*[_id == 'global-schedule'][0] {

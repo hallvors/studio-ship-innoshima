@@ -8,6 +8,10 @@
     margin-left: 1em;
 }
 
+.linklist li {
+    padding-bottom: 1em;
+}
+
 @media screen and (max-width: 820px) {
         .linklist {
             margin-right: 1em;
@@ -19,12 +23,20 @@
 }
 
 .active, .active a {
+    text-decoration: underline;
+}
+
+.linklist a:link, .linklist a:visited {
     text-decoration: none;
-    font-weight: 600;
+}
+
+.linklist a:hover {
+    text-decoration: underline;
 }
 
 .linklist svg {
     fill: #D68031;
+    fill: var(--global-accent-color);
     width: .5em;
     margin-right: .5em;
   }

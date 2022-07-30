@@ -1,11 +1,18 @@
 .header {
     text-align: center;
     border: 1px solid #D68031;
+    border-color: var(--global-accent-color);
     letter-spacing: 1vw;
     background-color: #efefef;
+    background-color: var(--text-background-color);
     padding: 1em 0;
     border-radius: 2em 2em 0 0;
 }
+
+.header h1 {
+    text-align: center;
+}
+
 .logo {
     float: left;
     padding-right: 3em;

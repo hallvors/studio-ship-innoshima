@@ -12,10 +12,12 @@
     width: 100%;
     font-weight: bold;
 	box-shadow: 0px 1px 5px -3px #d68031;
+    box-shadow: 0px 1px 5px -3px var(--global-accent-color);
 }
 
 .react-calendar {
     border: 2px solid #d68031;
+    border-color: var(--global-accent-color);
     border-radius: 2em 2em 0 0;
 }
 
@@ -23,9 +25,11 @@
     padding-left: 0;
     padding-right: 0;
     background-color: #efefef;
+    background-color: var(--text-background-color);
     display: flex;
     border: none;
     border-left: 1px solid #d68031;
+    border-color: var(--global-accent-color);
     justify-content: flex-start;
     font-size: small;
   }
@@ -56,6 +60,7 @@
 .lesson a {
     text-decoration: none;
     color: #d68031;
+    color: var(--global-accent-color);
 }
 
 .exception {

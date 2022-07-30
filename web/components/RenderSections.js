@@ -42,6 +42,9 @@ function RenderSections(props) {
   return (
     <Fragment>
       {sections.map((section, idx) => {
+        if (!section) {
+            return null;
+        }
         const SectionComponent = resolveSections(section);
         if (!SectionComponent) {
           return <div>Missing section {section._type}</div>;
