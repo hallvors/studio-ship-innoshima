@@ -16,6 +16,7 @@ import { enGB, ja } from "date-fns/locale";
 
 export default function Timetable(props) {
   const { lessons, exceptions } = props;
+  const now = new Date();
   console.log(JSON.stringify({ lessons, exceptions }, null, 2));
 
   const lessonsByDay = {};
@@ -29,7 +30,6 @@ export default function Timetable(props) {
   function formatDay(locale, date) {
     let cellContents = null;
     const relevantExceptions = [];
-    const now = new Date();
 
     // if exception covers this day, render only exception data
     if (exceptions) {
