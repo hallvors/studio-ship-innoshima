@@ -84,8 +84,3 @@ h1 {
 .react-calendar__month-view__weekdays abbr {
   text-decoration: none;
 }
-
-.react-slideshow-container .nav.default-nav
-{
-  display: none;
-}

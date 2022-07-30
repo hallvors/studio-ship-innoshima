@@ -1,10 +1,17 @@
 
 .linklist {
     list-style: none;
+    padding-inline-start: 0;
 }
 
-.item {
-
+@media screen and (max-width: 820px) {
+    .linklist {
+        margin-left: 1em;
+    }
+    .item {
+        display: inline-block;
+        margin-left: 1.5em;
+    }
 }
 
 .active, .active a {

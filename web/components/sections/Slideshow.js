@@ -4,8 +4,7 @@ import "react-slideshow-image/dist/styles.css";
 import Figure from "../Figure";
 import styles from "./Slideshow.module.css";
 const properties = {
-  prevArrow: null,
-  nextArrow: null,
+  arrows: false,
 };
 
 const Slideshow = (props) => {

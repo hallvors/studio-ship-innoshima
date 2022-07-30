@@ -2,6 +2,14 @@
     display: grid;
     grid-template-columns: 1.5fr 1fr;
 }
+
+@media screen and (max-width: 820px) {
+    .container {
+        margin-left: 2.5em;
+        margin-right: 2.5em;
+    }
+}
+
 .container h3 {
     grid-column: span 2;
     text-align: left;
