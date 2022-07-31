@@ -157,7 +157,6 @@ export default function Timetable(props) {
 
   return (
     <div className={styles["timetable"]}>
-      <h2>タイムテーブル</h2>
       <Calendar
         locale="ja-jp"
         defaultActiveStartDate={now}
