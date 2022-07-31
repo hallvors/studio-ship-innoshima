@@ -43,7 +43,7 @@ function RenderSections(props) {
     <Fragment>
       {sections.map((section, idx) => {
         if (!section) {
-            return null;
+          return null;
         }
         const SectionComponent = resolveSections(section);
         if (!SectionComponent) {

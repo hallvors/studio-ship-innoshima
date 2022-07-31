@@ -81,6 +81,7 @@ export async function getPlaceholderData(content) {
                   "teacher": teacher->name,
                 }
               }`);
+        timetable.placeholderSettings = content[i];
         content[i] = timetable;
       } else if (
         content[i] &&

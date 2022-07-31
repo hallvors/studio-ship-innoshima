@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import styles from "./Timetable.module.css";
 import Link from "next/link";
 import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 import {
   parseISO,
   format,
@@ -11,12 +12,24 @@ import {
   isBefore,
   isSameDay,
   getWeek,
+  isLastDayOfMonth,
+  addDays,
 } from "date-fns";
 import { enGB, ja } from "date-fns/locale";
 
+function optionallyPadTime(str) {
+    if (/^\d:/.test(str)) {
+        return '0' + str;
+    }
+    return str;
+}
+
 export default function Timetable(props) {
   const { lessons, exceptions } = props;
-  const now = new Date();
+  let now = new Date();
+  const useLinks = Boolean(
+    props.placeholderSettings && props.placeholderSettings.useLinks
+  );
   console.log(JSON.stringify({ lessons, exceptions }, null, 2));
 
   const lessonsByDay = {};
@@ -25,6 +38,29 @@ export default function Timetable(props) {
       lessonsByDay[lessons[i].weekday] = [];
     }
     lessonsByDay[lessons[i].weekday].push(lessons[i]);
+  }
+
+  Object.keys(lessonsByDay).forEach((day) => {
+    lessonsByDay[day].sort((a, b) => {
+      return optionallyPadTime(a.time) > optionallyPadTime(b.time) ? 1 : -1;
+    });
+  });
+
+  if (
+    props.placeholderSettings &&
+    props.placeholderSettings.type === "simple"
+  ) {
+    return simplifiedTable(lessonsByDay);
+  }
+
+  if (isLastDayOfMonth(now)) {
+    // we may want to skip to next month if there's nothing left to show
+    // in the current..
+    console.log("last day of month!");
+    const weekday = format(now, "cccc", { locale: enGB }).toLowerCase();
+    if (!lessonsByDay[weekday]) {
+      now = addDays(now, 1);
+    }
   }
 
   function formatDay(locale, date) {
@@ -57,31 +93,42 @@ export default function Timetable(props) {
       const weekday = format(date, "cccc", { locale: enGB }).toLowerCase();
       if (lessonsByDay[weekday]) {
         cellContents = lessonsByDay[weekday].map((lesson) => {
-          if (
-            relevantExceptions.find((exception) =>
-              exception.activities.find(
-                (activity) => activity._ref === lesson.activity._id
-              )
+          let exception = relevantExceptions.find((exception) =>
+            exception.activities.find(
+              (activity) => activity._ref === lesson.activity._id
             )
-          ) {
-            return null;
+          );
+
+          if (exception) {
+            return (
+              <div className={styles["lesson"]} key={lesson._key}>
+                {exception.title}
+              </div>
+            );
           }
           return (
             <div className={styles["lesson"]} key={lesson._key}>
               {lesson.time}
-              {lesson.activity && (
-                <Link href={`/レッスン/${lesson.activity.name}`}>
-                  <a>
-                    <b>{lesson.activity.name}</b>
-                  </a>
-                </Link>
-              )}{" "}
+              {lesson.activity &&
+                (useLinks ? (
+                  <Link href={`/レッスン/${lesson.activity.name}`}>
+                    <a>
+                      <b>{lesson.activity.name}</b>
+                    </a>
+                  </Link>
+                ) : (
+                  <b>{lesson.activity.name}</b>
+                ))}{" "}
               <br />
               {lesson.teacher && (
                 <span>
-                  <Link href={`/先生/${lesson.teacher}`}>
-                    <a>{lesson.teacher}</a>
-                  </Link>
+                  {useLinks ? (
+                    <Link href={`/先生/${lesson.teacher}`}>
+                      <a>{lesson.teacher}</a>
+                    </Link>
+                  ) : (
+                    lesson.teacher
+                  )}
                 </span>
               )}
             </div>
@@ -90,7 +137,9 @@ export default function Timetable(props) {
       }
     }
 
-    const isWeekInThePast = getWeek(date) < getWeek(now) || (date.getDay() === 0 &&  getWeek(date) === getWeek(now));
+    const isWeekInThePast =
+      getWeek(date) < getWeek(now) ||
+      (date.getDay() === 0 && getWeek(date) === getWeek(now));
 
     return (
       <div
@@ -115,8 +164,50 @@ export default function Timetable(props) {
         formatDay={formatDay}
         className={styles["react-calendar"]}
         tileClassName={styles["react-calendar__tile"]}
+        prev2Label={null}
+        next2Label={null}
       />
     </div>
+  );
+}
+
+function simplifiedTable(lessonsByDay) {
+  const days = [
+    { en: "monday", ja: "月" },
+
+    { en: "tuesday", ja: "火" },
+    { en: "wednesday", ja: "水" },
+    { en: "thursday", ja: "木" },
+    { en: "friday", ja: "金" },
+    { en: "saturday", ja: "土" },
+    { en: "sunday", ja: "日" },
+  ];
+  return (
+    <table className={styles["simplifiedCalendar"]}>
+      <caption>ひと目でわかるタイムテーブル</caption>
+      <tr>
+        {days.map((day) => (lessonsByDay[day.en] ? <th>{day.ja}</th> : null))}
+      </tr>
+      <tr>
+        {days.map((day) => {
+          if (!lessonsByDay[day.en]) {
+            return null;
+          }
+          return (
+            <td>
+              {lessonsByDay[day.en].map((lesson) => (
+                <div className={styles["simpleEntry"]}>
+                  <span className={styles["time"]}>{lesson.time}</span>{" "}
+                  <span className={styles["lesson"]}>
+                    {lesson.activity.name}
+                  </span>
+                </div>
+              ))}
+            </td>
+          );
+        })}
+      </tr>
+    </table>
   );
 }
 

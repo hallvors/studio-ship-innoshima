@@ -13,7 +13,7 @@ const Slideshow = (props) => {
   }
   return (
     <div className="slide-container">
-        <h1 className={styles["header"]}>{props.title}</h1>
+      <h1 className={styles["header"]}>{props.title}</h1>
       <Zoom {...properties}>
         {props.images.map((image) => {
           return (
