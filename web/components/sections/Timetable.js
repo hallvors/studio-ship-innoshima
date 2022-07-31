@@ -18,10 +18,10 @@ import {
 import { enGB, ja } from "date-fns/locale";
 
 function optionallyPadTime(str) {
-    if (/^\d:/.test(str)) {
-        return '0' + str;
-    }
-    return str;
+  if (/^\d:/.test(str)) {
+    return "0" + str;
+  }
+  return str;
 }
 
 export default function Timetable(props) {
@@ -50,7 +50,7 @@ export default function Timetable(props) {
     props.placeholderSettings &&
     props.placeholderSettings.type === "simple"
   ) {
-    return simplifiedTable(lessonsByDay);
+    return simplifiedTable(lessonsByDay, useLinks);
   }
 
   if (isLastDayOfMonth(now)) {
@@ -170,7 +170,7 @@ export default function Timetable(props) {
   );
 }
 
-function simplifiedTable(lessonsByDay) {
+function simplifiedTable(lessonsByDay, useLinks) {
   const days = [
     { en: "monday", ja: "月" },
 
@@ -198,7 +198,29 @@ function simplifiedTable(lessonsByDay) {
                 <div className={styles["simpleEntry"]}>
                   <span className={styles["time"]}>{lesson.time}</span>{" "}
                   <span className={styles["lesson"]}>
-                    {lesson.activity.name}
+                    {lesson.activity &&
+                      (useLinks ? (
+                        <Link href={`/レッスン/${lesson.activity.name}`}>
+                          <a>
+                            <b>{lesson.activity.name}</b>
+                          </a>
+                        </Link>
+                      ) : (
+                        <b>{lesson.activity.name}</b>
+                      ))}{" "}
+                    <span className={styles["teacher"]}>
+                      {lesson.teacher && (
+                        <span>
+                          {useLinks ? (
+                            <Link href={`/先生/${lesson.teacher}`}>
+                              <a>{lesson.teacher}</a>
+                            </Link>
+                          ) : (
+                            lesson.teacher
+                          )}
+                        </span>
+                      )}
+                    </span>
                   </span>
                 </div>
               ))}

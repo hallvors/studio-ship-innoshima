@@ -22,11 +22,15 @@ function SimpleBlockContent(props) {
         marks: {
           internalLink: (props) => {
             console.log(props);
-            const {slug = {}} = props.value;
+            const { slug = {} } = props.value;
             const href = `/${slug.current}`;
-            return <Link href={href}><a>{props.children}</a></Link>
-          }
-        }
+            return (
+              <Link href={href}>
+                <a>{props.children}</a>
+              </Link>
+            );
+          },
+        },
       }}
     />
   );

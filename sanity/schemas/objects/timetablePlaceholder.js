@@ -13,7 +13,7 @@ export default {
         {
             name: 'useLinks',
             type: 'boolean',
-            title: 'Link to teachers and lessons (full calendar only)',
+            title: 'Link to teachers and lessons',
         }
     ],
     preview: {
