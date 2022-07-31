@@ -113,3 +113,10 @@ h2, h3 {
 .react-calendar__month-view__weekdays abbr {
   text-decoration: none;
 }
+
+.react-calendar .react-calendar__tile--active, .react-calendar .react-calendar__tile--active:hover,
+.react-calendar .react-calendar__tile--hasActive, .react-calendar .react-calendar__tile--hasActive:hover,
+.react-calendar .react-calendar__month-view__days__day--neighboringMonth {
+  background-color: inherit;
+  color: inherit;
+}
