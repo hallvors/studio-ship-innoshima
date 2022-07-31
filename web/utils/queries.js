@@ -13,6 +13,19 @@ const contentProjection = groq`"content": content[]{
     },
     _type == 'slideshow' => {
       ..., "images": images[]{..., "dimensions":asset->metadata.dimensions}
+    },
+    _type == 'textbox' => {
+        ...,
+        content[]{
+            ...,
+            markDefs[]{
+                ...,
+                _type == "internalLink" => {
+                  _type,
+                  "slug": @.reference->slug
+                }
+              }
+        }
     }
    }`;
 

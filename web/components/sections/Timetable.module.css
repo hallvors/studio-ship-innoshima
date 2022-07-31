@@ -88,7 +88,9 @@
     margin: 2em .5em;
     table-layout: fixed;
 }
-
+.simplifiedCalendar caption {
+    font-weight: bold;
+}
 .simplifiedCalendar, .simplifiedCalendar th, .simplifiedCalendar td {
     border-collapse: collapse;
     border: 1px solid var(--global-accent-color);

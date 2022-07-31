@@ -29,7 +29,27 @@ export const getServerSideProps = async ({ params }) => {
       ...,
       "homepage": homepage->{_id, title, slug},
       "globalNavItems": globalNavItems{_type, "contents":contents[]->{title, slug, _key}},
-      "logo": logo{..., "dimensions":asset->metadata.dimensions}
+      "logo": logo{..., "dimensions":asset->metadata.dimensions},
+      header[]{
+        ...,
+        markDefs[]{
+          ...,
+          _type == "internalLink" => {
+            _type,
+            "slug": @.reference->slug
+          }
+        }
+      },
+      footer[]{
+        ...,
+        markDefs[]{
+          ...,
+          _type == "internalLink" => {
+            _type,
+            "slug": @.reference->slug
+          }
+        }
+      },
     }`
   );
   // site has title, description, footer, header, homepage (ref), keywords
