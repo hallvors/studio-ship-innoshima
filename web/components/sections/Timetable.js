@@ -193,9 +193,9 @@ function simplifiedTable(lessonsByDay, useLinks) {
             return null;
           }
           return (
-            <td>
+            <td key={day}>
               {lessonsByDay[day.en].map((lesson) => (
-                <div className={styles["simpleEntry"]}>
+                <div className={styles["simpleEntry"]} key={lesson._key}>
                   <span className={styles["time"]}>{lesson.time}</span>{" "}
                   <span className={styles["lesson"]}>
                     {lesson.activity &&
