@@ -36,6 +36,7 @@ const imageProjection = groq`{
 export function getDataPromisesForRoute(slug, siteSettings, isPreview) {
   const promises = [];
   const slugParts = (slug || "").split(/\//g);
+  console.log({slug, slugParts});
   if (slug === "/" || slug === "" || slug === null) {
     // Requesting /
     promises.push(
