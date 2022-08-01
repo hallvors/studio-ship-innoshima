@@ -37,7 +37,7 @@ export function getDataPromisesForRoute(slug, siteSettings, isPreview) {
   const promises = [];
   const slugParts = (slug || "").split(/\//g);
   console.log({slug, slugParts});
-  if (slug === "/" || slug === "" || slug === null) {
+  if (["/", "", "index", null, undefined].includes(slug)) {
     // Requesting /
     promises.push(
       isPreview
