@@ -91,6 +91,7 @@
 }
 .simplifiedCalendar caption {
   font-weight: bold;
+  display: none;
 }
 .simplifiedCalendar,
 .simplifiedCalendar th,
