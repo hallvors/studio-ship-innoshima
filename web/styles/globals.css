@@ -1,19 +1,19 @@
 :root {
   --frame-background-color: #fdf058b5;
   --text-color: #572700;
-  --text-background-color: #ffffff70;
+  --text-background-color: #fcf4f4ab;
   --global-accent-color: #c57120;
 }
 
 html,
 body {
-  font-family: 'Zen Maru Gothic', sans-serif;
+  font-family: "BIZ UDPGothic", sans-serif;
   padding: 0;
   margin: 0;
   color: var(--text-color);
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  background-color:#efefef;
+  background-color: #efefef;
   background-color: var(--text-background-color);
 }
 
@@ -31,7 +31,7 @@ body {
 }
 
 a:link {
-  color: #D68031;
+  color: #d68031;
   color: var(--global-accent-color);
 }
 
@@ -49,12 +49,11 @@ a:visited {
   padding: 2.5em 0;
 }
 
-
 @media screen and (min-width: 820px) {
   .two-column-page {
     display: grid;
     grid-template-columns: 25% 1fr;
-    grid-column-gap: 1em;
+    grid-column-gap: 0.2em;
   }
 
   .two-column-page section {
@@ -63,19 +62,20 @@ a:visited {
 
   .two-column-page section.section-0 {
     grid-column-start: 1;
-    grid-row: span 2;
+    grid-row: 1/100;
+    padding-left: 1em;
   }
 
   body {
     margin: 2vh 5vw;
     padding: 0;
-    background-color:#efefef;
+    background-color: #efefef;
     background-color: var(--text-background-color);
     font-size: 1.3rem;
   }
 }
 
-h1, h2, h3 {
+h1 {
   font-family: Rampart One;
 }
 
@@ -85,9 +85,10 @@ h1 {
   font-weight: lighter;
 }
 
-h2, h3 {
+h2,
+h3 {
   text-align: left;
-  font-weight: normal;
+  font-weight: 600;
 }
 
 /* No module-friendly override for this class? */
@@ -101,7 +102,7 @@ h2, h3 {
 }
 
 .react-calendar__month-view__weekdays__weekday {
-  border-left: 1px solid #D68031;
+  border-left: 1px solid #d68031;
   border-color: var(--global-accent-color);
   padding-bottom: 0;
 }
@@ -114,8 +115,10 @@ h2, h3 {
   text-decoration: none;
 }
 
-.react-calendar .react-calendar__tile--active, .react-calendar .react-calendar__tile--active:hover,
-.react-calendar .react-calendar__tile--hasActive, .react-calendar .react-calendar__tile--hasActive:hover,
+.react-calendar .react-calendar__tile--active,
+.react-calendar .react-calendar__tile--active:hover,
+.react-calendar .react-calendar__tile--hasActive,
+.react-calendar .react-calendar__tile--hasActive:hover,
 .react-calendar .react-calendar__month-view__days__day--neighboringMonth {
   background-color: inherit;
   color: inherit;

@@ -1,12 +1,12 @@
 .maingrid {
-    margin: .5em;
+  margin: 0.5em;
 }
 @media screen and (min-width: 820px) {
-    .maingrid {
-        /* header, content grid */
-        display: grid;
-        grid-template-rows: fit-content(15%) 1fr;
-        grid-column-gap: 0;
-        margin: 0;
-    }
+  .maingrid {
+    /* header, content grid */
+    display: grid;
+    grid-template-rows: fit-content(15%) 1fr;
+    grid-column-gap: 0;
+    margin: 0;
+  }
 }

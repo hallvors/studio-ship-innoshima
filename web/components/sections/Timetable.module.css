@@ -1,112 +1,115 @@
 .timetable {
-    margin: 0 1em;
+  margin: 0 1em;
 }
 .datecell {
-    min-height: 160px;
-    border-top: 2px solid #d68031;
-    padding-left: 0.5em;
+  min-height: 160px;
+  border-top: 2px solid #d68031;
+  padding-left: 0.5em;
 }
 @media screen and (max-width: 820px) {
-    .timetable {
-        margin: 0 .1em;
-        border-width: 1px;
-    }
-    .datecell, .simplifiedCalendar {
-        font-size: 2vw;
-        padding-left: 0;
-        border-width: 1px;
-    }
-    .timetable .react-calendar {
-        border-width: 1px;
-    }
+  .timetable {
+    margin: 0 0.1em;
+    border-width: 1px;
+  }
+  .datecell,
+  .simplifiedCalendar {
+    font-size: 2vw;
+    padding-left: 0;
+    border-width: 1px;
+  }
+  .timetable .react-calendar {
+    border-width: 1px;
+  }
 }
 .date {
-    width: 100%;
-    font-weight: bold;
-	box-shadow: 0px 1px 5px -3px #d68031;
-    box-shadow: 0px 1px 5px -3px var(--global-accent-color);
+  width: 100%;
+  font-weight: bold;
+  box-shadow: 0px 1px 5px -3px #d68031;
+  box-shadow: 0px 1px 5px -3px var(--global-accent-color);
 }
 
 .timetable .react-calendar {
-    border: 1px solid #d68031;
-    border-color: var(--global-accent-color);
-    border-radius: 2em 2em 0 0;
-    width: 100%;
+  border: 1px solid #d68031;
+  border-color: var(--global-accent-color);
+  border-radius: 2em 2em 0 0;
+  width: 100%;
 }
 
-.timetable .react-calendar  .react-calendar__tile {
-    padding-left: 0;
-    padding-right: 0;
-    background-color: #efefef;
-    background-color: var(--text-background-color);
-    display: flex;
-    border: none;
-    border-left: 1px solid #d68031;
-    border-color: var(--global-accent-color);
-    justify-content: flex-start;
-    font-size: small;
-  }
+.timetable .react-calendar .react-calendar__tile {
+  padding-left: 0;
+  padding-right: 0;
+  background-color: #efefef;
+  background-color: var(--text-background-color);
+  display: flex;
+  border: none;
+  border-left: 1px solid #d68031;
+  border-color: var(--global-accent-color);
+  justify-content: flex-start;
+  font-size: small;
+}
 .react-calendar__tile abbr {
   flex: 0 0 100%;
 }
 
 .past {
-    opacity: .4;
+  opacity: 0.4;
 }
 
 .pastweek {
-    display: none;
+  display: none;
 }
 
 .lesson {
-    padding: 1em 0;
-    border-bottom: #ccc dashed 1px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+  padding: 1em 0;
+  border-bottom: #ccc dashed 1px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .lesson:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .lesson a {
-    text-decoration: none;
-    color: #d68031;
-    color: var(--global-accent-color);
+  text-decoration: none;
+  color: #d68031;
+  color: var(--global-accent-color);
 }
 
 .exception {
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 95px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 95px;
 }
 
 .simplifiedCalendar {
-    margin: 2em .5em;
-    table-layout: fixed;
+  margin: 2em 0.5em;
+  table-layout: fixed;
 }
 .simplifiedCalendar caption {
-    font-weight: bold;
+  font-weight: bold;
 }
-.simplifiedCalendar, .simplifiedCalendar th, .simplifiedCalendar td {
-    border-collapse: collapse;
-    border: 1px solid var(--global-accent-color);
-    padding: .5em;
-    vertical-align: top;
+.simplifiedCalendar,
+.simplifiedCalendar th,
+.simplifiedCalendar td {
+  border-collapse: collapse;
+  border: 1px solid var(--global-accent-color);
+  padding: 0.5em;
+  vertical-align: top;
 }
 
 .simpleEntry {
-    border-bottom: 1px dashed var(--text-color);
-    padding: .2em 0;
+  border-bottom: 1px dashed var(--text-color);
+  padding: 0.2em 0;
 }
 
 .simpleEntry:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .simpleEntry .time {
-    display: block;
+  display: block;
 }

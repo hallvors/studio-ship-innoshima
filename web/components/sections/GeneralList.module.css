@@ -1,11 +1,11 @@
 .list {
 }
 .card {
-    padding-bottom: 2em;
-    margin-bottom: 2em;
-    border-bottom: 1px solid #d68031;
-    border-color: var(--global-accent-color);
+  padding-bottom: 2em;
+  margin-bottom: 2em;
+  border-bottom: 1px solid #d68031;
+  border-color: var(--global-accent-color);
 }
 .card:last-child {
-    border: none;
+  border: none;
 }

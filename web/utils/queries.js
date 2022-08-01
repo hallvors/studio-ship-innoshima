@@ -39,23 +39,24 @@ export function getDataPromisesForRoute(slug, siteSettings, isPreview) {
   if (slug === "/" || slug === "") {
     // Requesting /
     promises.push(
-      isPreview ? clientWithAuth.fetch(
-        groq`
+      isPreview
+        ? clientWithAuth.fetch(
+            groq`
         coalesce(
           *[_id == 'drafts.' + $id][0],
           *[_id == $id][0]
         )
       {..., ${contentProjection}}`,
-        { id: siteSettings.homepage._id }
-      ) :
-      client.fetch(
-        groq`*[
+            { id: siteSettings.homepage._id }
+          )
+        : client.fetch(
+            groq`*[
           _type == "page" &&
           _id == $id &&
           !(_id in path('drafts.**'))
         ][0]{..., ${contentProjection}}`,
-        { id: siteSettings.homepage._id }
-      )
+            { id: siteSettings.homepage._id }
+          )
     );
   } else if (slugParts.length === 1) {
     promises.push(
@@ -103,9 +104,9 @@ export async function getPlaceholderData(content, isPreview) {
         continue;
       }
       if (content[i] && content[i]._type === "timetablePlaceholder") {
-        const timetable =
-          await (isPreview ? clientWithAuth : client).fetch(groq`coalesce(
-            *[_id == ${isPreview ? `'drafts.' + ` : ''} $id][0],
+        const timetable = await (isPreview ? clientWithAuth : client).fetch(
+          groq`coalesce(
+            *[_id == ${isPreview ? `'drafts.' + ` : ""} $id][0],
             *[_id == $id][0]
           ){
             _type,
@@ -115,7 +116,9 @@ export async function getPlaceholderData(content, isPreview) {
               "activity": activity->{_id, name},
               "teacher": teacher->name,
             }
-          }`, {id: 'global-schedule'});
+          }`,
+          { id: "global-schedule" }
+        );
         timetable.placeholderSettings = content[i];
         content[i] = timetable;
       } else if (

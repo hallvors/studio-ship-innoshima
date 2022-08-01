@@ -4,7 +4,7 @@ import { NextSeo } from "next-seo";
 import PropTypes from "prop-types";
 import React from "react";
 
-import client, {clientWithAuth} from "../client";
+import client, { clientWithAuth } from "../client";
 import Layout from "../components/Layout";
 import RenderSections from "../components/RenderSections";
 import { getDataPromisesForRoute, getPlaceholderData } from "../utils/queries";

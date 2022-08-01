@@ -7,11 +7,11 @@ function Footer(props) {
   const { text } = props;
 
   return (
-      <div className={styles.root}>
-        <div className={styles.text}>
-          <SimpleBlockContent content={text} />
-        </div>
+    <div className={styles.root}>
+      <div className={styles.text}>
+        <SimpleBlockContent content={text} />
       </div>
+    </div>
   );
 }
 
