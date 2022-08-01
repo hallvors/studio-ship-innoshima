@@ -235,7 +235,7 @@ function simplifiedTable(lessonsByDay, useLinks) {
 Timetable.propTypes = {
   lessons: PropTypes.arrayOf(
     PropTypes.shape({
-      activity: PropTypes.string,
+      activity: PropTypes.object,
       teacher: PropTypes.string,
       time: PropTypes.string,
       weekday: PropTypes.string,

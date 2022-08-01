@@ -4,7 +4,7 @@ import { NextSeo } from "next-seo";
 import PropTypes from "prop-types";
 import React from "react";
 
-import client from "../client";
+import client, {clientWithAuth} from "../client";
 import Layout from "../components/Layout";
 import RenderSections from "../components/RenderSections";
 import { getDataPromisesForRoute, getPlaceholderData } from "../utils/queries";
@@ -18,13 +18,12 @@ import { slugParamToPath } from "../utils/urls";
  * for every page requested - /, /about, /contact, etc..
  * From the received params.slug, we're able to query Sanity for the route coresponding to the currently requested path.
  */
-export const getServerSideProps = async ({ params }) => {
+export const getServerSideProps = async ({ query, params }) => {
   console.log({ params });
   const slug = slugParamToPath(params?.slug);
-  console.log({ derived: slug });
-  const slugParts = slug.split(/\//g);
-  // TODO: support a type/ID mode for teacher, event, activity?
-  let site = await client.fetch(
+  const isPreview = Boolean(query?.preview);
+  console.log({ derived: slug, isPreview });
+  let site = await (isPreview ? clientWithAuth : client).fetch(
     groq`*[_id == "global-config"][0]{
       ...,
       "homepage": homepage->{_id, title, slug},
@@ -54,7 +53,7 @@ export const getServerSideProps = async ({ params }) => {
   );
   // site has title, description, footer, header, homepage (ref), keywords
 
-  const promises = getDataPromisesForRoute(slug, site);
+  const promises = getDataPromisesForRoute(slug, site, isPreview);
 
   const routeData = await Promise.all(promises);
 
@@ -66,7 +65,7 @@ export const getServerSideProps = async ({ params }) => {
 
   if (routeData[0] && routeData[0]._type === "page") {
     if (routeData[0].content && routeData[0].content.length) {
-      await getPlaceholderData(routeData[0].content);
+      await getPlaceholderData(routeData[0].content, isPreview);
     }
   }
 

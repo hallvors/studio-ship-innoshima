@@ -1,5 +1,5 @@
 import groq from "groq";
-import client from "../client";
+import client, { clientWithAuth } from "../client";
 import { getSlugVariations } from "./urls";
 
 const contentProjection = groq`"content": content[]{
@@ -33,22 +33,38 @@ const imageProjection = groq`{
     ..., "image": image{..., "dimensions":asset->metadata.dimensions}
   }`;
 
-export function getDataPromisesForRoute(slug, siteSettings) {
+export function getDataPromisesForRoute(slug, siteSettings, isPreview) {
   const promises = [];
   const slugParts = (slug || "").split(/\//g);
   if (slug === "/" || slug === "") {
     // Requesting /
     promises.push(
+      isPreview ? clientWithAuth.fetch(
+        groq`
+        coalesce(
+          *[_id == 'drafts.' + $id][0],
+          *[_id == $id][0]
+        )
+      {..., ${contentProjection}}`,
+        { id: siteSettings.homepage._id }
+      ) :
       client.fetch(
-        groq`*[_type == "page" && _id == $id][0]{..., ${contentProjection}}`,
+        groq`*[
+          _type == "page" &&
+          _id == $id &&
+          !(_id in path('drafts.**'))
+        ][0]{..., ${contentProjection}}`,
         { id: siteSettings.homepage._id }
       )
     );
   } else if (slugParts.length === 1) {
     promises.push(
-      client.fetch(
+      (isPreview ? clientWithAuth : client).fetch(
         // Get the route document with one of the possible slugs for the given requested path
-        groq`*[_type == "page" && slug.current in $possibleSlugs][0]{..., ${contentProjection}}`,
+        groq`*[
+          _type == "page" &&
+          slug.current in $possibleSlugs
+        ][0]{..., ${contentProjection}}`,
         { possibleSlugs: getSlugVariations(slug) }
       )
     );
@@ -61,8 +77,11 @@ export function getDataPromisesForRoute(slug, siteSettings) {
     };
     if (types[slugParts[0]]) {
       promises.push(
-        client.fetch(
-          groq`*[_type == $type && name == $name][0]${imageProjection}`,
+        (isPreview ? clientWithAuth : client).fetch(
+          groq`*[
+            _type == $type &&
+            name == $name
+            ][0]${imageProjection}`,
           { type: types[slugParts[0]], name: slugParts[1] }
         )
       );
@@ -71,7 +90,7 @@ export function getDataPromisesForRoute(slug, siteSettings) {
   return promises;
 }
 
-export async function getPlaceholderData(content) {
+export async function getPlaceholderData(content, isPreview) {
   const types = {
     activitiesListPlaceholder: "activity",
     teachersListPlaceholder: "person",
@@ -85,15 +104,18 @@ export async function getPlaceholderData(content) {
       }
       if (content[i] && content[i]._type === "timetablePlaceholder") {
         const timetable =
-          await client.fetch(groq`*[_id == 'global-schedule'][0] {
-                _type,
-                exceptions,
-                "lessons": lessons[] {
-                  weekday, time,
-                  "activity": activity->{_id, name},
-                  "teacher": teacher->name,
-                }
-              }`);
+          await (isPreview ? clientWithAuth : client).fetch(groq`coalesce(
+            *[_id == ${isPreview ? `'drafts.' + ` : ''} $id][0],
+            *[_id == $id][0]
+          ){
+            _type,
+            exceptions,
+            "lessons": lessons[] {
+              weekday, time,
+              "activity": activity->{_id, name},
+              "teacher": teacher->name,
+            }
+          }`, {id: 'global-schedule'});
         timetable.placeholderSettings = content[i];
         content[i] = timetable;
       } else if (
@@ -101,7 +123,7 @@ export async function getPlaceholderData(content) {
         (content[i]._type === "teachersListPlaceholder" ||
           content[i]._type === "activitiesListPlaceholder")
       ) {
-        const list = await client.fetch(
+        const list = await (isPreview ? clientWithAuth : client).fetch(
           groq`*[_type == $type]| order(order, desc) |${imageProjection}`,
           { type: types[content[i]._type] }
         );
